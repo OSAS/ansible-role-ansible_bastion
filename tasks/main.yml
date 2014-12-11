@@ -35,7 +35,7 @@
   with_items:
   - file_changed_commit.sh
 
-- cron: name="merge git" job=/usr/local/bin/merge_git.sh minute=*/5
+- cron: name="merge git {{ git_repositories_dir }}" job="/usr/local/bin/merge_git.sh {{ git_repositories_dir }}" minute=*/5
 
 - cron: name="ansible run" user={{ ansible_username }} job=/usr/local/bin/ansible_run_all.sh hour=4
 

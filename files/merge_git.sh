@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-for i in  /srv/git_repos/*; do
+cd "$1"
+for i in  *; do
         GIT_WORK_TREE=/etc/ansible/ GIT_DIR=$i git checkout -q -f
 done;

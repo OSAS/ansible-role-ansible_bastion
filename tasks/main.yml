@@ -8,24 +8,19 @@
 - user: name={{ ansible_username }} generate_ssh_key=yes
   register: ansible_user
 
-- file: path=/srv/{{ item }} state=directory
-  with_items:
-  - git_repos
+- file: path={{ git_repositories_dir }} state=directory
 
-- file: path=/srv/git_repos/{{ item }} state=directory
+- file: path={{ git_repositories_dir }}/{{ item }} state=directory
   with_items:
   - public
   - private
 
-- shell: creates=/srv/git_repos/{{ item }}/config chdir=/srv/git_repos/{{ item }} git init --bare -q --shared=group
+- shell: creates={{ git_repositories_dir }}/{{ item }}/config chdir={{ git_repositories_dir }}/{{ item }} git init --bare -q --shared=group
   with_items:
   - public
   - private
 
-# TODO proper permissions ?
-#- git: repo={{ private_git_location }} dest=/srv/git_checkouts/ansible_private
-
-- copy: dest=/srv/git_repos/{{ item }}/hooks/post-receive src=post-receive.{{ item }}.sh mode=0755
+- copy: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive src=post-receive.{{ item }}.sh mode=0755
   with_items:
   - public
   - private

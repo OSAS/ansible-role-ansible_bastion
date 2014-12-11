@@ -1,0 +1,33 @@
+Ideas to make the bastion more secure
+-------------------------------------
+
+specific selinux policy for the user
+- write the policy
+- load/apply it
+
+use a separate /tmp
+
+automatically renew the ssh ( add a playbook for that )
+
+make sure the firewall run ?
+
+
+Features to add
+---------------
+
+Permit manual run from user ( sudo )
+
+Support ansible-galaxy update (need to force 1.8)
+
+Verify tasks with ansible-lint before commit in the repo
+
+Make frequency of run configurable
+
+Make the name of the group autorized to commit configurable
+
+Development
+-----------
+
+Add some documentation on the architecture
+
+Add a .travis.yml for tasks/main.yml, check python and shell files.

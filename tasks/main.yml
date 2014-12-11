@@ -38,14 +38,3 @@
 - cron: name="merge git {{ git_repositories_dir }}" job="/usr/local/bin/merge_git.sh {{ git_repositories_dir }}" minute=*/5
 
 - cron: name="ansible run" user={{ ansible_username }} job=/usr/local/bin/ansible_run_all.sh hour=4
-
-# TODO also offer permission so people can run on demand
-# make sure people can also run playbook
-
-# TODO add a way to renew the ssh keys
-
-# TODO
-# firewall => all blocked except ssh in and out
-# host ids ?
-# separate /tmp
-# selinux policy for the ansible user

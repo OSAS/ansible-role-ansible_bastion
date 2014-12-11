@@ -1,0 +1,56 @@
+---
+- name: install ansible
+  yum: pkg={{ item }} state=installed
+  with_items:
+  - ansible
+  - git
+
+- user: name={{ ansible_username }} generate_ssh_key=yes
+  register: ansible_user
+  
+- file: path=/srv/{{ item }} state=directory
+  with_items:
+  - git_repos
+
+- file: path=/srv/git_repos/{{ item }} state=directory
+  with_items:
+  - public
+  - private
+
+- shell: creates=/srv/git_repos/{{ item }}/config chdir=/srv/git_repos/{{ item }} git init --bare -q --shared=group
+  with_items:
+  - public
+  - private
+
+# TODO proper permissions ?
+#- git: repo={{ private_git_location }} dest=/srv/git_checkouts/ansible_private
+
+- copy: dest=/srv/git_repos/{{ item }}/hooks/post-receive src=post-receive.{{ item }}.sh mode=0755
+  with_items:
+  - public
+  - private
+
+- copy: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
+  with_items:
+  - merge_git.sh
+  - ansible_run_all.sh
+  - generate_ansible_command.py
+
+- template: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
+  with_items:
+  - file_changed_commit.sh
+
+- cron: name="merge git" job=/usr/local/bin/merge_git.sh minute=*/5
+
+- cron: name="ansible run" user={{ ansible_username }} job=/usr/local/bin/ansible_run_all.sh hour=4
+
+# TODO also offer permission so people can run on demand
+# make sure people can also run playbook
+
+# TODO add a way to renew the ssh keys 
+
+# TODO
+# firewall => all blocked except ssh in and out
+# host ids ?
+# separate /tmp
+# selinux policy for the ansible user 

@@ -1,2 +1,6 @@
+# the username that will run the ansible script
+# # user will be created along a pair of ssh key
 ansible_username: ansible_admin
+# git repositories location, 2 repo will be created as
+# private and public
 git_repositories_dir: /srv/git_repos

@@ -28,6 +28,4 @@ Make the name of the group autorized to commit configurable
 Development
 -----------
 
-Add some documentation on the architecture
-
 Add a .travis.yml for tasks/main.yml, check python and shell files.

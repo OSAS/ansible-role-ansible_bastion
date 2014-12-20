@@ -4,3 +4,6 @@ ansible_username: ansible_admin
 # git repositories location, 2 repo will be created as
 # private and public
 git_repositories_dir: /srv/git_repos
+# directory holding the fact cache
+# currently using jsonfile, since that's the easiest to deploy
+cache_folder: /var/cache/ansible/

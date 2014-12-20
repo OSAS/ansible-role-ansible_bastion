@@ -8,6 +8,10 @@
 - user: name={{ ansible_username }} generate_ssh_key=yes
   register: ansible_user
 
+- template: dest=/etc/ansible/ansible.cfg src=ansible.cfg mode=0755
+
+- file: path={{ cache_folder }} state=directory owner={{ ansible_username }} mode=0755
+
 - file: path={{ git_repositories_dir }} state=directory
 
 - file: path={{ git_repositories_dir }}/{{ item }} state=directory

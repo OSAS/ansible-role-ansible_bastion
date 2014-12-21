@@ -94,14 +94,20 @@ def get_hosts_for_role(role):
 
 hosts_to_update = Set()
 apply_all = False
+update_requirements = False
 for path in sys.argv[1:]:
     splitted_path = path.split('/')
     if path == playbook_file:
         apply_all = True
+    elif path == 'requirements.yml':
+        update_requirements = True
     elif splitted_path[0] == 'roles':
         for i in get_hosts_for_role(splitted_path[1]):
             hosts_to_update.add(i)
 
+if update_requirements:
+    print 'sudo /usr/bin/ansible-galaxy install -f -r \
+    /etc/ansible/requirements.yml'
 if not apply_all:
     for h in hosts_to_update:
         print 'ansible-playbook -l %s %s' % (h, playbook_file)

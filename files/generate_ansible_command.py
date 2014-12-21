@@ -61,7 +61,7 @@ def parse_roles_meta(directory):
 
 def get_roles_deps(roles, r):
     result = [r]
-    if not r in roles:
+    if r not in roles:
         return result
     for i in roles[r]:
         result.append(i)

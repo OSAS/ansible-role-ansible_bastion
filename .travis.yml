@@ -5,5 +5,15 @@ before_install:
  - sudo apt-get update -qq
 install:
   - pip install ansible-lint
+  - pip install flake8
 script:
-  - ansible-lint tasks/main.yml  
+  - ansible-lint tasks/main.yml
+  - set -e ; for i in files/*.sh; do bash -n $i ;done 
+  - set -e ; for i in files/*.py; do flake8 $i ;done
+  - "echo '---\n- hosts: 127.0.0.1\n  remote_user: root\n  roles:' > role.yml"
+  - echo "  - ${TRAVIS_REPO_SLUG/*\//}" >> role.yml
+  - "echo '[defaults]\nroles_path = ../\n' > ansible.cfg"
+  - ansible-playbook -i '127.0.0.1,' --syntax-check role.yml
+  - ansible-playbook -i '127.0.0.1,' -c local --sudo -vvvv role.yml
+  - ansible-playbook -i '127.0.0.1,' -c local --sudo -vvvv role.yml | grep -q 'changed=0.*failed=0'
+  

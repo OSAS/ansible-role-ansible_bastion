@@ -1,6 +1,6 @@
 ---
 - name: install ansible
-  yum: pkg={{ item }} state=installed
+  action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
   with_items:
   - ansible
   - git

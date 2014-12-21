@@ -1,5 +1,7 @@
 Ansible module used by OSAS to manage a set of server using ansible.
 
+[![Build Status](https://travis-ci.org/OSAS/ansible-role-ansible_bastion.svg?branch=master)](https://travis-ci.org/OSAS/ansible-role-ansible_bastion)
+
 Architecture
 ------------
 

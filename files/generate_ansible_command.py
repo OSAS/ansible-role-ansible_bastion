@@ -8,10 +8,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,21 +28,23 @@ import sys
 
 playbook_file = "/etc/ansible/playbooks/deploy.yml"
 
+
 def parse_roles_playbook(playbook_file):
 
     playbook = yaml.load(open(playbook_file, 'r'))
     result = {}
 
     for doc in playbook:
-        host =  doc['hosts']
+        host = doc['hosts']
         roles = Set()
         for r in doc['roles']:
-            if type(r) ==type(''):
+            if r.isinstance(''):
                 roles.add(r)
-            elif type(r) == type({}):
+            elif r.isinstance({}):
                 roles.add(r['role'])
         result[host] = roles
     return result
+
 
 def parse_roles_meta(directory):
     roles = {}
@@ -56,6 +58,7 @@ def parse_roles_meta(directory):
                     roles[r].add(dep['role'])
     return roles
 
+
 def get_roles_deps(roles, r):
     result = [r]
     if not r in roles:
@@ -63,8 +66,9 @@ def get_roles_deps(roles, r):
     for i in roles[r]:
         result.append(i)
         if i in roles:
-            result.extend(get_roles_deps(roles,i))
+            result.extend(get_roles_deps(roles, i))
     return result
+
 
 def get_host_roles_dict(playbook_file, roles_path='/etc/ansible/roles'):
     result = {}
@@ -77,6 +81,7 @@ def get_host_roles_dict(playbook_file, roles_path='/etc/ansible/roles'):
             for r2 in get_roles_deps(roles, r):
                 result[host].add(r2)
     return result
+
 
 def get_hosts_for_role(role):
     result = []
@@ -101,4 +106,4 @@ if not apply_all:
     for h in hosts_to_update:
         print 'ansible-playbook -l %s %s' % (h, playbook_file)
 else:
-    print 'ansible-playbook %s' % playbook_file 
+    print 'ansible-playbook %s' % playbook_file

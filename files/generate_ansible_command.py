@@ -38,9 +38,9 @@ def parse_roles_playbook(playbook_file):
         host = doc['hosts']
         roles = Set()
         for r in doc['roles']:
-            if isinstance(r, ''):
+            if isinstance(r, str):
                 roles.add(r)
-            elif isinstance(r, {}):
+            elif isinstance(r, dict):
                 roles.add(r['role'])
         result[host] = roles
     return result

@@ -1,0 +1,1 @@
+{{ ansible_username }}  ALL = NOPASSWD: /usr/bin/ansible-galaxy install -f -r /etc/ansible/requirements.yml

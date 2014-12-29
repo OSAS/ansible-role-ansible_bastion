@@ -35,6 +35,8 @@
   - ansible_run_all.sh
   - generate_ansible_command.py
 
+- template: src=update_galaxy.sudoers dest=/etc/sudoers.d/update_galaxy validate='visudo -cf %s'
+
 - template: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
   with_items:
   - file_changed_commit.sh

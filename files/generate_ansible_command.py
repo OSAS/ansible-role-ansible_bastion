@@ -106,8 +106,7 @@ for path in sys.argv[1:]:
             hosts_to_update.add(i)
 
 if update_requirements:
-    print 'sudo /usr/bin/ansible-galaxy install -f -r \
-    /etc/ansible/requirements.yml'
+    print 'sudo /usr/local/bin/update_galaxy.sh'
 if not apply_all:
     for h in hosts_to_update:
         print 'ansible-playbook -l %s %s' % (h, playbook_file)

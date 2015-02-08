@@ -4,7 +4,8 @@ galaxy_info:
   description: Ansible bastion host to control a set of servers, act like a puppet or salt master
   company: Red Hat
   license: MIT
-  min_ansible_version: 1.2
+  # use default_omit, need 1.8
+  min_ansible_version: 1.8
   # Only tested with EL 7 and EL 6. No reason anything do 
   # not work anywhere else, just no time to test.
   # I would welcome patches 

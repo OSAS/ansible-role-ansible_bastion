@@ -10,3 +10,5 @@ cache_folder: /var/cache/ansible/
 # hour to run ansible run every day, by default at 4am in the morning
 # this is fed directly to the cron module
 ansible_run_hour: 4
+# minute to run ansible.
+ansible_run_minute: 0

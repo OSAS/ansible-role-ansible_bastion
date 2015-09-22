@@ -1,0 +1,2 @@
+Host *.{{ ansible_domain }}
+    GSSAPIDelegateCredentials yes

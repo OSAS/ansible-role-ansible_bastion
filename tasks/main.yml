@@ -8,7 +8,7 @@
 - user: name={{ ansible_username }} generate_ssh_key=yes
   register: ansible_user
 
-- template: dest=~{{ ansible_user }}/.ssh/config src=ssh_config
+- template: dest=~{{ ansible_username }}/.ssh/config src=ssh_config
 
 - template: dest=/etc/ansible/ansible.cfg src=ansible.cfg mode=0755
 

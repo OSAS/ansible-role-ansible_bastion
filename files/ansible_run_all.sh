@@ -22,4 +22,4 @@
 #
 cd /etc/ansible
 
-ansible-playbook /etc/ansible/playbooks/deploy.yml
+ansible-playbook /etc/ansible/playbooks/deploy.yml $*

@@ -21,13 +21,43 @@
 # SOFTWARE.
 #
 
+# This script take a git repository, a git checkout, and 2 commits reference
+# and run the appropriate ansible-playbook command
+#
+# It make a few assumptions on the directory tree:
+# - that a file /usr/local/bin/update_galaxy.sh can be run by sudo, and update
+#   the role tree. I want to not run it as root so that's required
+# - that playbooks are splitted in $CHECKOUT/playbooks, and that the playbook to deploy
+#   start by deploy
+# - that you are using a .yml extensions
+#
+# I keep a separate checkout from the main git repository due to the use of a private
+# repository for password and the like
+#
+# Verbosity setting is still to be be added
+# And so does unit tests...
+
+
 import yaml
 from sets import Set
 import os
 import sys
+import glob
+import subprocess
 
-playbook_file = "/etc/ansible/playbooks/deploy.yml"
+import argparse
+parser = argparse.ArgumentParser(description="Run ansible playbooks based on actual changes in git")
+parser.add_argument("-v", "--verbose", help="increase output verbosity",
+                    action="store_true")
+parser.add_argument("-n", "--dry-run", help="only show what would be done",
+                    action="store_true")
+parser.add_argument('--path', help="path of the updated git checkout", default="/etc/ansible")
+parser.add_argument('--git', help="git repository path", required=True)
+parser.add_argument('--old', help="git commit before the push", required=True)
+parser.add_argument('--new', default="HEAD", help="git commit after the push")
 
+
+args = parser.parse_args()
 
 def parse_roles_playbook(playbook_file):
 
@@ -83,7 +113,9 @@ def get_host_roles_dict(playbook_file, roles_path='/etc/ansible/roles'):
     return result
 
 
-def get_hosts_for_role(role):
+# return the group
+def get_hosts_for_role(role, playbook_file):
+    """ Return the list of hosts where a role is applied in a specific playbook """
     result = []
     host_roles = get_host_roles_dict(playbook_file)
     for i in host_roles:
@@ -91,24 +123,44 @@ def get_hosts_for_role(role):
             result.append(i)
     return result
 
+# TODO make the pattern configurable ?
+def get_playbooks_deploy(checkout_path):
+    return glob.glob('%s/playbooks/deploy*.yml' % checkout_path)
+
+def get_changed_files(git_repo, old, new):
+    changed_files = Set()
+    diff = subprocess.check_output(["git", '--no-pager', 'diff',  "--name-status", "--diff-filter=ACDMR", "%s..%s" % (old, new)], cwd=git_repo)
+    for l in diff.split('\n'):
+        if len(l) > 0:
+            (t,f) = l.split()
+            changed_files.add(f)
+    return changed_files
+
+changed_files = get_changed_files(args.git, args.old, args.new)
 
 hosts_to_update = Set()
-apply_all = False
+playbooks_to_run = Set()
+
+commands_to_run = []
+
 update_requirements = False
-for path in sys.argv[1:]:
-    splitted_path = path.split('/')
-    if path == playbook_file:
-        apply_all = True
-    elif path == 'requirements.yml':
-        update_requirements = True
-    elif splitted_path[0] == 'roles':
-        for i in get_hosts_for_role(splitted_path[1]):
-            hosts_to_update.add(i)
+for p in get_playbooks_deploy(args.path):
+    for path in changed_files:
+        splitted_path = path.split('/')
+        if path == 'requirements.yml':
+            update_requirements = True
+        elif splitted_path[0] == 'roles':
+            if len(get_hosts_for_role(splitted_path[1], p)) > 0:
+                playbooks_to_run.add(p)
 
 if update_requirements:
-    print 'sudo /usr/local/bin/update_galaxy.sh'
-if not apply_all:
-    for h in hosts_to_update:
-        print 'ansible-playbook -l %s %s' % (h, playbook_file)
-else:
-    print 'ansible-playbook %s' % playbook_file
+    commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')
+
+for p in playbooks_to_run:
+    commands_to_run.append('ansible-playbook %s' % p)
+
+for c in commands_to_run:
+    if args.dry_run:
+        print c
+    else:
+        subprocess.call(c.split(), cwd=args.path)

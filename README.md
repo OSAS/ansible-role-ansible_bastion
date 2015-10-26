@@ -27,4 +27,15 @@ Variables
 ---------
 
 A few variables have been added to configure the role, please look at 
-defaults/main.yml 
+defaults/main.yml
+
+Directory layout
+----------------
+
+While everything should be configurable later, for now, the layout of the git
+repository need to follow a few set of rules:
+
+ - all roles are in roles/
+ - requirement.yml can be safely used to update the roles
+ - all playbooks are in playbooks/ and the one to be used for automated deployment
+   are named with this pattern: deploy.\*.yml

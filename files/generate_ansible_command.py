@@ -55,7 +55,7 @@ parser.add_argument('--path', help="path of the updated git checkout", default="
 parser.add_argument('--git', help="git repository path", required=True)
 parser.add_argument('--old', help="git commit before the push", required=True)
 parser.add_argument('--new', default="HEAD", help="git commit after the push")
-
+parser.add_argument('--compat', default=False, help="Activate compatibility mode", action="store_true")
 
 args = parser.parse_args()
 
@@ -140,6 +140,7 @@ changed_files = get_changed_files(args.git, args.old, args.new)
 
 hosts_to_update = Set()
 playbooks_to_run = Set()
+limits = Set()
 
 commands_to_run = []
 
@@ -157,7 +158,17 @@ if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')
 
 for p in playbooks_to_run:
-    commands_to_run.append('ansible-playbook %s' % p)
+    if args.compat:
+        for path in changed_files:
+            if path.startswith('roles/'):
+                for l in get_hosts_for_role(path.split('/')[1], p):
+                    limits.add(l)
+
+        for l in limits:
+            commands_to_run.append('ansible-playbook -l %s %s' % (l,p))
+
+    else:
+        commands_to_run.append('ansible-playbook %s' % p)
 
 for c in commands_to_run:
     if args.dry_run:

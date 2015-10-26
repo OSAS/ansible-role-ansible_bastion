@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# {{ ansible_managed }}
+#
 # Copyright (c) 2014 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,12 +21,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
+#
 
-while read OLDREV NEWREV REF
-do
-        # update /etc/ansible
-        GIT_WORK_TREE=/etc/ansible/ git checkout -q -f
-        # run ansible
-        /usr/local/bin/file_changed_commit.sh $REF $OLDREV $NEWREV
-done
+GIT_WORK_TREE=/etc/ansible/ git checkout -q -f

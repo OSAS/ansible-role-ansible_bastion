@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# {{ ansible_managed }}
+#
 # Copyright (c) 2014 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,6 +21,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
+# 
 
-GIT_WORK_TREE=/etc/ansible/ git checkout -q -f
+while read OLDREV NEWREV REF
+do
+        # update /etc/ansible
+        GIT_WORK_TREE=/etc/ansible/ git checkout -q -f
+        # run ansible
+        su - {{ ansible_username }} -c "generate_ansible_command.py --compat --old $OLDREV --new $NEWREV --git $(pwd)"
+done

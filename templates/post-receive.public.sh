@@ -28,5 +28,5 @@ do
         # update /etc/ansible
         GIT_WORK_TREE=/etc/ansible/ git checkout -q -f
         # run ansible
-        su - {{ ansible_username }} -c "generate_ansible_command.py --compat --old $OLDREV --new $NEWREV --git $(pwd)"
+        su - {{ ansible_username }} -c "generate_ansible_command.py {{ '--compat' if not compat_disable else '' }} --old $OLDREV --new $NEWREV --git $(pwd)"
 done

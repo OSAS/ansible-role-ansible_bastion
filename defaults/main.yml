@@ -12,3 +12,6 @@ cache_folder: /var/cache/ansible/
 ansible_run_hour: 4
 # minute to run ansible.
 ansible_run_minute: 0
+# flag to use or not the compat mode
+# will be switched to True once I migrated and tested my workload
+compat_disable: False

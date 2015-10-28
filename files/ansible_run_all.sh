@@ -22,4 +22,6 @@
 #
 cd /etc/ansible
 
-ansible-playbook /etc/ansible/playbooks/deploy.yml $*
+for i in playbooks/deploy*.yml; do 
+    ansible-playbook $i $*
+done

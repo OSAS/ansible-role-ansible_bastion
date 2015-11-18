@@ -27,12 +27,12 @@
 # It make a few assumptions on the directory tree:
 # - that a file /usr/local/bin/update_galaxy.sh can be run by sudo, and update
 #   the role tree. I want to not run it as root so that's required
-# - that playbooks are splitted in $CHECKOUT/playbooks, and that the playbook to deploy
-#   start by deploy
+# - that playbooks are splitted in $CHECKOUT/playbooks, and that the playbook
+#   filename to deploy start by "deploy"
 # - that you are using a .yml extensions
 #
-# I keep a separate checkout from the main git repository due to the use of a private
-# repository for password and the like
+# I keep a separate checkout from the main git repository due to the use of
+# a private repository for password and the like
 #
 # Verbosity setting is still to be be added
 # And so does unit tests...
@@ -41,23 +41,26 @@
 import yaml
 from sets import Set
 import os
-import sys
 import glob
 import subprocess
 
 import argparse
-parser = argparse.ArgumentParser(description="Run ansible playbooks based on actual changes in git")
+parser = argparse.ArgumentParser(description="Run ansible playbooks based "
+                                             "on actual changes in git")
 parser.add_argument("-v", "--verbose", help="increase output verbosity",
                     action="store_true")
 parser.add_argument("-n", "--dry-run", help="only show what would be done",
                     action="store_true")
-parser.add_argument('--path', help="path of the updated git checkout", default="/etc/ansible")
+parser.add_argument('--path', help="path of the updated git checkout",
+                    default="/etc/ansible")
 parser.add_argument('--git', help="git repository path", required=True)
 parser.add_argument('--old', help="git commit before the push", required=True)
 parser.add_argument('--new', default="HEAD", help="git commit after the push")
-parser.add_argument('--compat', default=False, help="Activate compatibility mode", action="store_true")
+parser.add_argument('--compat', default=False,
+                    help="Activate compatibility mode", action="store_true")
 
 args = parser.parse_args()
+
 
 def parse_roles_playbook(playbook_file):
 
@@ -115,7 +118,8 @@ def get_host_roles_dict(playbook_file, roles_path='/etc/ansible/roles'):
 
 # return the group
 def get_hosts_for_role(role, playbook_file):
-    """ Return the list of hosts where a role is applied in a specific playbook """
+    """ Return the list of hosts where a role is applied in a specific
+    playbook """
     result = []
     host_roles = get_host_roles_dict(playbook_file)
     for i in host_roles:
@@ -123,16 +127,20 @@ def get_hosts_for_role(role, playbook_file):
             result.append(i)
     return result
 
+
 # TODO make the pattern configurable ?
 def get_playbooks_deploy(checkout_path):
     return glob.glob('%s/playbooks/deploy*.yml' % checkout_path)
 
+
 def get_changed_files(git_repo, old, new):
     changed_files = Set()
-    diff = subprocess.check_output(["git", '--no-pager', 'diff',  "--name-status", "--diff-filter=ACDMR", "%s..%s" % (old, new)], cwd=git_repo)
+    diff = subprocess.check_output(["git", '--no-pager', 'diff',
+                                    "--name-status", "--diff-filter=ACDMR",
+                                    "%s..%s" % (old, new)], cwd=git_repo)
     for l in diff.split('\n'):
         if len(l) > 0:
-            (t,f) = l.split()
+            (t, f) = l.split()
             changed_files.add(f)
     return changed_files
 
@@ -165,7 +173,7 @@ for p in playbooks_to_run:
                     limits.add(l)
 
         for l in limits:
-            commands_to_run.append('ansible-playbook -l %s %s' % (l,p))
+            commands_to_run.append('ansible-playbook -l %s %s' % (l, p))
 
     else:
         commands_to_run.append('ansible-playbook %s' % p)

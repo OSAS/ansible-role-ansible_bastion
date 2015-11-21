@@ -43,6 +43,8 @@ from sets import Set
 import os
 import glob
 import subprocess
+import StringIO
+import ConfigParser
 
 import argparse
 parser = argparse.ArgumentParser(description="Run ansible playbooks based "
@@ -144,6 +146,15 @@ def get_changed_files(git_repo, old, new):
             changed_files.add(f)
     return changed_files
 
+def extract_list_hosts_git(revision, path):
+    fp = StringIO.StringIO(subprocess.check_output(['git', 'show', '%s:hosts' % revision], cwd=path))
+    cp = ConfigParser.RawConfigParser()
+    cp.readfp(fp)
+    result = Set()
+    for s in cp.sections():
+        result.add(cp.options(s)[0].split(' ')[0])
+    return result
+
 changed_files = get_changed_files(args.git, args.old, args.new)
 
 hosts_to_update = Set()
@@ -161,6 +172,15 @@ for p in get_playbooks_deploy(args.path):
         elif splitted_path[0] == 'roles':
             if len(get_hosts_for_role(splitted_path[1], p)) > 0:
                 playbooks_to_run.add(p)
+
+if 'hosts' in changed_files:
+    old = extract_list_hosts_git(args.old, args.path)
+    new = extract_list_hosts_git(args.new, args.path)
+    diff = new - old
+    if len(diff) > 0:
+        for hostname in diff:
+            # TODO verify hostname
+            commands_to_run.append('ssh-keyscan %s >> ~/.ssh/known_hosts' % hostname)
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

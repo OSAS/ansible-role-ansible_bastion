@@ -182,9 +182,11 @@ if 'hosts' in changed_files:
     diff = new - old
     if len(diff) > 0:
         for hostname in diff:
-            # TODO verify hostname
-            commands_to_run.append('ssh-keyscan %s >> ~/.ssh/known_hosts'
-                                   % hostname)
+            # No need for a full fledged verification, just making
+            # sure there is no funky chars for shell, and no space
+            if re.search('^[\w.-]+$', hostname):
+                commands_to_run.append('ssh -o StrictHostKeyChecking=no %s id'
+                                       % hostname)
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

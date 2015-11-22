@@ -72,7 +72,7 @@ def parse_roles_playbook(playbook_file):
     for doc in playbook:
         host = doc['hosts']
         roles = Set()
-        for r in doc.get('roles',[]):
+        for r in doc.get('roles', []):
             if isinstance(r, str):
                 roles.add(r)
             elif isinstance(r, dict):
@@ -146,8 +146,11 @@ def get_changed_files(git_repo, old, new):
             changed_files.add(f)
     return changed_files
 
+
 def extract_list_hosts_git(revision, path):
-    fp = StringIO.StringIO(subprocess.check_output(['git', 'show', '%s:hosts' % revision], cwd=path))
+    fp = StringIO.StringIO(subprocess.check_output(['git', 'show',
+                                                    '%s:hosts' % revision],
+                                                   cwd=path))
     cp = ConfigParser.RawConfigParser()
     cp.readfp(fp)
     result = Set()
@@ -180,7 +183,8 @@ if 'hosts' in changed_files:
     if len(diff) > 0:
         for hostname in diff:
             # TODO verify hostname
-            commands_to_run.append('ssh-keyscan %s >> ~/.ssh/known_hosts' % hostname)
+            commands_to_run.append('ssh-keyscan %s >> ~/.ssh/known_hosts'
+                                   % hostname)
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

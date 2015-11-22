@@ -45,6 +45,7 @@ import glob
 import subprocess
 import StringIO
 import ConfigParser
+import re
 
 import argparse
 parser = argparse.ArgumentParser(description="Run ansible playbooks based "

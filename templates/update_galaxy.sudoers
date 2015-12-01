@@ -1,1 +1,2 @@
+Defaults!/usr/local/bin/update_galaxy.sh  !requiretty
 {{ ansible_username }}  ALL = NOPASSWD: /usr/local/bin/update_galaxy.sh

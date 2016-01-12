@@ -59,3 +59,5 @@
       job=/usr/local/bin/ansible_run_all.sh
       minute="{{ ansible_run_minute | default(omit) }}"
       hour="{{ ansible_run_hour | default(omit) }}"
+
+- include: git_shell.yml

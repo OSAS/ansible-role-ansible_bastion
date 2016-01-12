@@ -19,3 +19,5 @@ compat_disable: False
 use_ansible_git: False
 # the branch of ansible to use, if using the git version
 ansible_git_version: devel
+# the username for remote pushing to git repos
+git_username: git

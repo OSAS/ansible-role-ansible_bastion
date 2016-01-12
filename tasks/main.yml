@@ -15,7 +15,7 @@
 
 - file: path={{ git_repositories_dir }} state=directory
 
-- file: path={{ git_repositories_dir }}/{{ item }} state=directory
+- file: path={{ git_repositories_dir }}/{{ item }} state=directory group={{ ansible_admin_group | omit }}
   with_items:
   - public
   - private

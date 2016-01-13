@@ -61,3 +61,4 @@
       hour="{{ ansible_run_hour | default(omit) }}"
 
 - include: git_shell.yml
+  when: use_git_shell is defined

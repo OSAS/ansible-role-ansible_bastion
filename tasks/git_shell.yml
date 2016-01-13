@@ -1,3 +1,15 @@
 
-- user: name={{ git_username }} shell=/usr/bin/git-shell
+- set_fact: git_home=/srv/git
+- user: name={{ git_username }} shell=/usr/bin/git-shell home={{ git_home }}
 
+- file: name={{ git_home }}/git-shell-commands state=directory
+
+- file: state=link dest={{ git_home }}/git-shell-commands/{{ item }} src=/usr/share/doc/git/contrib/git-shell-commands/{{ item }}
+  with_items:
+  - list
+  - help
+
+- file: state=link dest={{ git_home }}/{{ item }}.git src={{ git_repositories_dir }}/{{ item }}
+  with_items:
+  - public
+  - private

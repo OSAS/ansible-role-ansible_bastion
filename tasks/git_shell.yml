@@ -4,7 +4,7 @@
 
 - file: name={{ git_home }}/git-shell-commands state=directory
 
-- file: state=link dest={{ git_home }}/git-shell-commands/{{ item }} src=/usr/share/doc/git/contrib/git-shell-commands/{{ item }}
+- copy: dest={{ git_home }}/git-shell-commands/{{ item }} src={{ item }} mode=0755
   with_items:
   - list
   - help

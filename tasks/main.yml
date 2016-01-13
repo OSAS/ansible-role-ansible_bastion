@@ -1,11 +1,16 @@
 ---
-- name: install ansible
+- name: install git
   action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
   with_items:
-  - ansible
   - git
 
 - user: name={{ ansible_username }} generate_ssh_key=yes
+
+- include: install_ansible_rpm.yml
+  when: use_ansible_HEAD is not defined
+
+- include: install_ansible_git.yml
+  when: use_ansible_HEAD is defined
 
 - template: dest=~{{ ansible_username }}/.ssh/config src=ssh_config
 

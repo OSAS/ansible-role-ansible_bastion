@@ -1,0 +1,6 @@
+- name: install ansible
+  action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
+  with_items:
+  - ansible
+
+

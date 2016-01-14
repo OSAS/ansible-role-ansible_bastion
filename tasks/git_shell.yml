@@ -1,6 +1,6 @@
 
 - set_fact: git_home=/srv/git
-- user: name={{ git_username }} shell=/usr/bin/git-shell home={{ git_home }}
+- user: name={{ git_username }} shell=/usr/bin/git-shell home={{ git_home }} group={{ ansible_admin_group | default(omit) }}
 
 - file: name={{ git_home }}/git-shell-commands state=directory
 

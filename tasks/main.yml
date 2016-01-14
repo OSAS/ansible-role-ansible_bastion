@@ -6,6 +6,9 @@
 
 - user: name={{ ansible_username }} generate_ssh_key=yes
 
+- group: name={{ ansible_admin_group }}
+  when: ansible_admin_group is defined
+
 - include: install_ansible_rpm.yml
   when: use_ansible_HEAD is not defined
 

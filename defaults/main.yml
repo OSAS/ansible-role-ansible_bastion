@@ -15,3 +15,7 @@ ansible_run_minute: 0
 # flag to use or not the compat mode
 # will be switched to True once I migrated and tested my workload
 compat_disable: False
+# use a git snapshot instead of the package (can be used for tracking devel, or 2.X)
+use_ansible_git: False
+# the branch of ansible to use, if using the git version
+ansible_git_version: devel

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (c) 2014 Michael Scherer <mscherer@redhat.com>
+# Copyright (c) 2014-2016 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+if ! test -d "$1"; then
+  echo "$1 should be a directory holding all the git repositories, exiting"
+  exit 1
+fi
+
 cd "$1"
 for i in  *; do
         GIT_WORK_TREE=/etc/ansible/ GIT_DIR=$i git checkout -q -f

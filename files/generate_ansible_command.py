@@ -167,7 +167,6 @@ playbooks_to_run = Set()
 limits = Set()
 
 commands_to_run = []
-
 update_requirements = False
 for p in get_playbooks_deploy(args.path):
     for path in changed_files:
@@ -177,6 +176,10 @@ for p in get_playbooks_deploy(args.path):
         elif splitted_path[0] == 'roles':
             if len(get_hosts_for_role(splitted_path[1], p)) > 0:
                 playbooks_to_run.add(p)
+
+for path in changed_files:
+    if path.startswith('playbooks/deploy') and path.endswith('.yml'):
+        playbooks_to_run.add(path)
 
 if 'hosts' in changed_files:
     old = extract_list_hosts_git(args.old, args.path)

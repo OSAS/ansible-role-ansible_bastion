@@ -90,8 +90,9 @@ def parse_roles_meta(directory):
             meta = yaml.load(open(meta_file, 'r'))
             if meta and 'dependencies' in meta:
                 roles[r] = Set()
-                for dep in meta['dependencies']:
-                    roles[r].add(dep['role'])
+                if meta['dependencies'] is not None:
+                    for dep in meta['dependencies']:
+                        roles[r].add(dep['role'])
     return roles
 
 

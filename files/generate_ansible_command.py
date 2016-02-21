@@ -82,8 +82,11 @@ def parse_roles_playbook(playbook_file):
     return result
 
 
+cache_role_meta={}
 def parse_roles_meta(directory):
     roles = {}
+    if directory in cache_role_meta:
+        return cache_role_meta[directory]
     for r in os.listdir(directory):
         meta_file = "%s/%s/meta/main.yml" % (directory, r)
         if os.path.exists(meta_file):
@@ -93,6 +96,7 @@ def parse_roles_meta(directory):
                 if meta['dependencies'] is not None:
                     for dep in meta['dependencies']:
                         roles[r].add(dep['role'])
+    cache_role_meta[directory] = roles
     return roles
 
 

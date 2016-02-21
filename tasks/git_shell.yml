@@ -12,6 +12,7 @@
   with_items:
   - list
   - help
+  - update_external_roles
 
 - name: Link repositories
   file: state=link dest={{ git_home }}/{{ item }}.git src={{ git_repositories_dir }}/{{ item }}

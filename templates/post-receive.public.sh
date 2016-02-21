@@ -28,5 +28,5 @@ do
         # update /etc/ansible
         sudo /usr/local/bin/update_ansible_config.sh
         # run ansible
-        su - {{ ansible_username }} -c "generate_ansible_command.py {{ '--compat' if not compat_disable else '' }} --old $OLDREV --new $NEWREV --git $(pwd)"
+        sudo -u {{ ansible_username }} -c /usr/local/bin/generate_ansible_command.py {{ '--compat' if not compat_disable else '' }} --old $OLDREV --new $NEWREV --git $(pwd)
 done

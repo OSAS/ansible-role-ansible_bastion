@@ -205,7 +205,7 @@ if 'hosts' in changed_files:
             if re.search('^[\w.-]+$', hostname):
                 commands_to_run.append("ssh "
                                        "-o PreferredAuthentications=publickey "
-                                       " -o StrictHostKeyChecking=no" %s id
+                                       " -o StrictHostKeyChecking=no %s id"
                                        % hostname)
 
 if update_requirements:

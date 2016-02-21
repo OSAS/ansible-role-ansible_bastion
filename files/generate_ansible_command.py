@@ -65,7 +65,10 @@ parser.add_argument('--compat', default=False,
 args = parser.parse_args()
 
 
+cache_role_playbook={}
 def parse_roles_playbook(playbook_file):
+    if playbook_file in cache_role_playbook:
+        return cache_role_playbook[playbook_file]
 
     playbook = yaml.load(open(playbook_file, 'r'))
     result = {}
@@ -79,6 +82,7 @@ def parse_roles_playbook(playbook_file):
             elif isinstance(r, dict):
                 roles.add(r['role'])
         result[host] = roles
+    cache_role_playbook[playbook_file] = result
     return result
 
 

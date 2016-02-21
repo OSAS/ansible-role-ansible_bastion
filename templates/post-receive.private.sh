@@ -22,4 +22,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-sudo /usr/local/bin/update_ansible_config.sh
+sudo -n /usr/local/bin/update_ansible_config.sh

@@ -1,6 +1,6 @@
 - set_fact: checkout_dir=/usr/local/src/ansible
 
-- name: install ansible deps
+- name: Install ansible deps from {{ ansible_pkg_mgr }}
   action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
   with_items:
   - python-jinja2
@@ -10,13 +10,16 @@
   - python-keyczar
 
 - git: repo=https://github.com/ansible/ansible.git dest={{ checkout_dir }}
+  name: Checkout git in {{ checkout_dir }}
 
-- template: dest=/usr/local/bin/{{ item }} src={{ item }} mode=0755
+- name: Create helper scripts
+  template: dest=/usr/local/bin/{{ item }} src={{ item }} mode=0755
   with_items:
   - ansible_git
   - ansible_git_update
 
-- file: dest=/usr/bin/{{ item }} src=/usr/local/bin/ansible_git state=link
+- name: Create compatibility links
+  file: dest=/usr/bin/{{ item }} src=/usr/local/bin/ansible_git state=link
   with_items:
   - ansible
   - ansible-doc
@@ -25,6 +28,8 @@
   - ansible-pull
   - ansible-vault
 
-- file: dest=/etc/ansible state=directory
+- name: Create /etc/ansible directory
+  file: dest=/etc/ansible state=directory
 
-- cron: name="update ansible git" minute=*/20 job=/usr/local/bin/ansible_git_update
+- name: Set cron to automatically update the checkout
+  cron: name="update ansible git" minute=*/20 job=/usr/local/bin/ansible_git_update

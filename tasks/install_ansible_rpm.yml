@@ -1,4 +1,4 @@
-- name: install ansible
+- name: Install ansible from rpm
   action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
   with_items:
   - ansible

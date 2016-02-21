@@ -15,15 +15,15 @@ make sure the firewall run ?
 Features to add
 ---------------
 
-Permit manual run from user ( sudo )
-
-Support ansible-galaxy update (need to force 1.8)
+Permit manual run from user ( sudo ) with git-shell and without, see ansible-rbac, of any playbooks
 
 Verify tasks with ansible-lint before commit in the repo
 
-Make frequency of run configurable
+Add a way to specify the ssh key for git with git-shell (look at freeipa and AuthorizedKeysCommand, or manual)
 
-Make the name of the group autorized to commit configurable
+Playbook for updating ssh keys
+- need to have a copy of the old private keys somewhere
+
 
 Development
 -----------

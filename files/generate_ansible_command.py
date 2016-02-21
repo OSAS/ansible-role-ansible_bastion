@@ -139,6 +139,9 @@ def get_playbooks_deploy(checkout_path):
 
 def get_changed_files(git_repo, old, new):
     changed_files = Set()
+    if old == '0000000000000000000000000000000000000000':
+        old = subprocess.check_output(['git', 'rev-list', '--max-parents=0', 'HEAD'], cwd=git_repo)
+
     diff = subprocess.check_output(["git", '--no-pager', 'diff',
                                     "--name-status", "--diff-filter=ACDMR",
                                     "%s..%s" % (old, new)], cwd=git_repo)

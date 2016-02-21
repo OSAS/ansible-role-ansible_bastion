@@ -28,6 +28,9 @@
   - public
   - private
 
+- template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=sudoers_cmd_config validate='visudo -cf %s'
+  when: ansible_admin_group is defined
+
 - shell: creates={{ git_repositories_dir }}/{{ item }}/config chdir={{ git_repositories_dir }}/{{ item }} git init --bare -q --shared=group
   with_items:
   - public

@@ -1,0 +1,8 @@
+Cmnd_Alias UPDATE_ANSIBLE_CONFIG = /usr/local/bin/update_ansible_config.sh
+Cmnd_Alias GENERATE_ANSIBLE_COMMAND = /usr/local/bin/generate_ansible_command.py
+
+Defaults!UPDATE_ANSIBLE_CONFIG    !requiretty
+Defaults!GENERATE_ANSIBLE_COMMAND !requiretty
+
+%{{ ansible_admin_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG 
+%{{ ansible_admin_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND

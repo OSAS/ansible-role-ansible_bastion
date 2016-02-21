@@ -44,6 +44,7 @@
   - ansible_run_all.sh
   - generate_ansible_command.py
   - update_galaxy.sh
+  - update_ansible_config.sh
 
 - template: src=update_galaxy.sudoers dest=/etc/sudoers.d/update_galaxy validate='visudo -cf %s'
 

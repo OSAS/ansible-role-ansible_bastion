@@ -22,5 +22,4 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
-
-GIT_WORK_TREE=/etc/ansible/ git checkout -q -f
+sudo /usr/local/bin/update_ansible_config.sh

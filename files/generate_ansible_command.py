@@ -196,7 +196,7 @@ for p in get_playbooks_deploy(args.path):
 
 for path in changed_files:
     if path.startswith('playbooks/deploy') and path.endswith('.yml'):
-        playbooks_to_run.add(path)
+        playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:
     old = extract_list_hosts_git(args.old, args.path)

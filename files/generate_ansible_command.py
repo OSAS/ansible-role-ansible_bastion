@@ -153,12 +153,14 @@ def get_changed_files(git_repo, old, new):
 
 
 def extract_list_hosts_git(revision, path):
+    result = Set()
+    if revision == '0000000000000000000000000000000000000000':
+        return result
     fp = StringIO.StringIO(subprocess.check_output(['git', 'show',
                                                     '%s:hosts' % revision],
                                                    cwd=path))
     cp = ConfigParser.RawConfigParser()
     cp.readfp(fp)
-    result = Set()
     for s in cp.sections():
         result.add(cp.options(s)[0].split(' ')[0])
     return result

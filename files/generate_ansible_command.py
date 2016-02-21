@@ -190,7 +190,8 @@ if 'hosts' in changed_files:
             # No need for a full fledged verification, just making
             # sure there is no funky chars for shell, and no space
             if re.search('^[\w.-]+$', hostname):
-                commands_to_run.append('ssh -o PreferredAuthentications=publickey \
+                commands_to_run.append('ssh \
+                                        -o PreferredAuthentications=publickey \
                                         -o StrictHostKeyChecking=no %s id'
                                        % hostname)
 

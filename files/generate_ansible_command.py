@@ -199,8 +199,8 @@ for path in changed_files:
         playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:
-    old = extract_list_hosts_git(args.old, args.path)
-    new = extract_list_hosts_git(args.new, args.path)
+    old = extract_list_hosts_git(args.old, args.git)
+    new = extract_list_hosts_git(args.new, args.git)
     diff = new - old
     if len(diff) > 0:
         for hostname in diff:

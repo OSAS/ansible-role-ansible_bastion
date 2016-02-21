@@ -159,9 +159,14 @@ def extract_list_hosts_git(revision, path):
     result = Set()
     if revision == '0000000000000000000000000000000000000000':
         return result
-    fp = StringIO.StringIO(subprocess.check_output(['git', 'show',
-                                                    '%s:hosts' % revision],
-                                                   cwd=path))
+    try:
+        fp = StringIO.StringIO(subprocess.check_output(['git', 'show',
+                                                        '%s:hosts' % revision],
+                                                       cwd=path))
+    # usually, this is done when we can't check the list of hosts
+    except subprocess.CalledProcessError:
+        return result
+
     cp = ConfigParser.RawConfigParser()
     cp.readfp(fp)
     for s in cp.sections():

@@ -65,7 +65,9 @@ parser.add_argument('--compat', default=False,
 args = parser.parse_args()
 
 
-cache_role_playbook={}
+cache_role_playbook = {}
+
+
 def parse_roles_playbook(playbook_file):
     if playbook_file in cache_role_playbook:
         return cache_role_playbook[playbook_file]
@@ -86,7 +88,9 @@ def parse_roles_playbook(playbook_file):
     return result
 
 
-cache_role_meta={}
+cache_role_meta = {}
+
+
 def parse_roles_meta(directory):
     roles = {}
     if directory in cache_role_meta:

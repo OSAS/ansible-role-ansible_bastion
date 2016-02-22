@@ -1,12 +1,14 @@
 ---
-- name: install git
+- name: Install git
   action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
   with_items:
   - git
 
-- user: name={{ ansible_username }} generate_ssh_key=yes
+- name: Create ansible user {{ ansible_username }}
+  user: name={{ ansible_username }} generate_ssh_key=yes
 
-- group: name={{ ansible_admin_group }}
+- name: Create {{ ansible_admin_group }} group
+  group: name={{ ansible_admin_group }}
   when: ansible_admin_group is defined
 
 - include: install_ansible_rpm.yml
@@ -15,25 +17,32 @@
 - include: install_ansible_git.yml
   when: use_ansible_HEAD is defined
 
-- template: dest=~{{ ansible_username }}/.ssh/config src=ssh_config
+- name: Setup ssh config for {{ ansible_username }}
+  template: dest=~{{ ansible_username }}/.ssh/config src=ssh_config
 
-- template: dest=/etc/ansible/ansible.cfg src=ansible.cfg mode=0755
+- name: Setup ansible.cfg
+  template: dest=/etc/ansible/ansible.cfg src=ansible.cfg mode=0755
 
-- file: path={{ cache_folder }} state=directory owner={{ ansible_username }} mode=0755
+- name: Create cache folder {{ cache_folder }}
+  file: path={{ cache_folder }} state=directory owner={{ ansible_username }} mode=0755
 
-- template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=sudoers_cmd_config validate='visudo -cf %s'
+- name: Add sudo config for admins
+  template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=sudoers_cmd_config validate='visudo -cf %s'
   when: ansible_admin_group is defined
 
 - include: create_repos.yml
 
-- template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/00_update_checkout.sh src=hooks/update_checkout.sh mode=0755
+- name: Add post-receive hook to checkout playbooks
+  template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/00_update_checkout.sh src=hooks/update_checkout.sh mode=0755
   with_items:
   - public
   - private
 
-- template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/01_trigger_run.sh src=hooks/trigger_run.sh mode=0755
+- name: Add post-receive hook to trigger a run
+  template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/01_trigger_run.sh src=hooks/trigger_run.sh mode=0755
 
-- copy: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
+- name: Deploy various helper scripts
+  copy: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
   with_items:
   - checkout_git_repos.sh
   - ansible_run_all.sh

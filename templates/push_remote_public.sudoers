@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 Cmnd_Alias PUSH_REMOTE_PUBLIC = /usr/local/bin/push_remote_public.sh
 
 Defaults!PUSH_REMOTE_PUBLIC  !requiretty

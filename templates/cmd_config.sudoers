@@ -1,3 +1,5 @@
+# {{ ansible_managed }}
+
 Cmnd_Alias UPDATE_ANSIBLE_CONFIG = /usr/local/bin/update_ansible_config.sh
 Cmnd_Alias GENERATE_ANSIBLE_COMMAND = /usr/local/bin/generate_ansible_command.py
 Cmnd_Alias UPDATE_EXTERNAL_ROLES = /usr/local/bin/update_galaxy.sh

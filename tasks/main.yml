@@ -58,3 +58,8 @@
 
 - include: git_shell.yml
   when: use_git_shell is defined
+
+- include: push_remote.yml
+  when: remotes is defined
+
+

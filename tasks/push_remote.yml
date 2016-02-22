@@ -1,0 +1,16 @@
+- name: Create user 
+  user: name={{ pusher_username }} generate_ssh_key=yes
+
+- name: Deploy the sync script
+  template: src=push_remote_public.sh dest=/usr/local/bin/push_remote_public.sh mode=0755
+
+- name: Add remote repositories to git
+  ini_file: dest={{ git_repositories_dir }}/public/config option=url value={{ item.url}} section="remote \"{{ item.name }}\""
+  with_items: remotes
+
+- name: Deploy hook to push to remote repositories
+  template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/02_push_remote.sh src=hooks/push_remote.sh mode=0755
+
+- name: Add sudo config for pushing to remote repositories
+  template: dest=/etc/sudoers.d/push_remote src=sudoers_push_remote validate='visudo -cf %s'
+  when: ansible_admin_group is defined

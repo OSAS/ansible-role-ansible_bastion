@@ -1,0 +1,5 @@
+Cmnd_Alias PUSH_REMOTE_PUBLIC = /usr/local/bin/push_remote_public.sh
+
+Defaults!PUSH_REMOTE_PUBLIC  !requiretty
+
+%{{ ansible_admin_group }}  ALL=({{ pusher_username }}) NOPASSWD: PUSH_REMOTE_PUBLIC

@@ -1,4 +1,4 @@
-- name: Create user 
+- name: Create user {{ pusher_username }} to sync repos
   user: name={{ pusher_username }} generate_ssh_key=yes
 
 - name: Deploy the sync script

@@ -27,7 +27,7 @@
   file: path={{ cache_folder }} state=directory owner={{ ansible_username }} mode=0755
 
 - name: Add sudo config for admins
-  template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=sudoers_cmd_config validate='visudo -cf %s'
+  template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=cmd_config.sudoers validate='visudo -cf %s'
   when: ansible_admin_group is defined
 
 - include: create_repos.yml

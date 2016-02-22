@@ -12,5 +12,5 @@
   template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/02_push_remote.sh src=hooks/push_remote.sh mode=0755
 
 - name: Add sudo config for pushing to remote repositories
-  template: dest=/etc/sudoers.d/push_remote src=sudoers_push_remote validate='visudo -cf %s'
+  template: dest=/etc/sudoers.d/push_remote_public src=push_remote_public.sudoers validate='visudo -cf %s'
   when: ansible_admin_group is defined

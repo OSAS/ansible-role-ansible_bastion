@@ -2,7 +2,7 @@
 #
 # {{ ansible_managed }}
 #
-# Copyright (c) 2014 Michael Scherer <mscherer@redhat.com>
+# Copyright (c) 2016 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,10 +23,10 @@
 # SOFTWARE.
 # 
 
+HOOK_DIR=$(dirname $0)
 while read OLDREV NEWREV REF
 do
-        # update /etc/ansible
-        sudo -n /usr/local/bin/update_ansible_config.sh
-        # run ansible
-        sudo -n -u {{ ansible_username }} /usr/local/bin/generate_ansible_command.py {{ '--compat' if not compat_disable else '' }} --old $OLDREV --new $NEWREV --git $(pwd)
+    for script in $HOOK_DIR/post-receive.d/*sh ; do
+        echo $OLDREV $NEWREV $REF | $script
+    done
 done

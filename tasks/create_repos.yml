@@ -1,0 +1,22 @@
+---
+- file: path={{ git_repositories_dir }} state=directory
+
+- file: path={{ git_repositories_dir }}/{{ item }} state=directory group={{ ansible_admin_group | default(omit) }} mode="u=rwx,g=rwxs"
+  with_items:
+  - public
+  - private
+
+- shell: creates={{ git_repositories_dir }}/{{ item }}/config chdir={{ git_repositories_dir }}/{{ item }} git init --bare -q --shared=group
+  with_items:
+  - public
+  - private
+
+- template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive src=hooks/post-receive.sh mode=0755
+  with_items:
+  - public
+  - private
+
+- file: path={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/ state=directory
+  with_items:
+  - public
+  - private

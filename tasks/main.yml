@@ -21,25 +21,17 @@
 
 - file: path={{ cache_folder }} state=directory owner={{ ansible_username }} mode=0755
 
-- file: path={{ git_repositories_dir }} state=directory
-
-- file: path={{ git_repositories_dir }}/{{ item }} state=directory group={{ ansible_admin_group | default(omit) }} mode="u=rwx,g=rwxs"
-  with_items:
-  - public
-  - private
-
 - template: dest=/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config src=sudoers_cmd_config validate='visudo -cf %s'
   when: ansible_admin_group is defined
 
-- shell: creates={{ git_repositories_dir }}/{{ item }}/config chdir={{ git_repositories_dir }}/{{ item }} git init --bare -q --shared=group
+- include: create_repos.yml
+
+- template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/00_update_checkout.sh src=hooks/update_checkout.sh mode=0755
   with_items:
   - public
   - private
 
-- template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive src=post-receive.{{ item }}.sh mode=0755
-  with_items:
-  - public
-  - private
+- template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/01_trigger_run.sh src=hooks/trigger_run.sh mode=0755
 
 - copy: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
   with_items:

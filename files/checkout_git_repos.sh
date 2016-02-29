@@ -26,6 +26,6 @@ if ! test -d "$1"; then
 fi
 
 cd "$1"
-for i in  *; do
+for i in  public private; do
         GIT_WORK_TREE=/etc/ansible/ GIT_DIR=$i git checkout -q -f
 done;

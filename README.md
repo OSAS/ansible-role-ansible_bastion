@@ -29,6 +29,24 @@ Variables
 A few variables have been added to configure the role, please look at 
 defaults/main.yml
 
+Pushing to remote repo
+----------------------
+
+It is possible to push automatically the public repository to one or more 
+distant git repository. To do that, please use the "remotes" variable like this:
+
+  - hosts: bastion.example.org
+  roles:
+  - role: bastion
+    remotes:
+    - { name: 'gitlab', url: 'git@gitlab.com:user/repo.git' }
+
+You can specify multiple remotes in the list. A separate '_git_pusher' user is created 
+for that task, and a ssh key is generated for it. 
+
+The playbook do not take care of setting the key on the other side, since that's typically
+used for various web services such as Github or Bitbucket, and that requires admin credentails.
+
 Directory layout
 ----------------
 

@@ -8,6 +8,9 @@
   ini_file: dest={{ git_repositories_dir }}/public/config option=url value={{ item.url}} section="remote \"{{ item.name }}\""
   with_items: remotes
 
+- name: Set the push.default config to simple
+  ini_file: dest={{ git_repositories_dir }}/public/config option="default" value="simple" section="push"
+
 - name: Deploy hook to push to remote repositories
   template: dest={{ git_repositories_dir }}/public/hooks/post-receive.d/02_push_remote.sh src=hooks/push_remote.sh mode=0755
 

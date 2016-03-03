@@ -27,5 +27,5 @@
 cd {{ git_repositories_dir }}/public
  
 {% for remote in remotes %}
-git push {{ remote.name }}
+git push --mirror {{ remote.name }}
 {% endfor %}

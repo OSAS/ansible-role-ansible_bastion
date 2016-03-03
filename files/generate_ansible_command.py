@@ -231,10 +231,10 @@ for p in playbooks_to_run:
                     limits.add(l)
 
         for l in limits:
-            commands_to_run.append('ansible-playbook -l %s %s' % (l, p))
+            commands_to_run.append('ansible-playbook -D -l %s %s' % (l, p))
 
     else:
-        commands_to_run.append('ansible-playbook %s' % p)
+        commands_to_run.append('ansible-playbook -D %s' % p)
 
 for c in commands_to_run:
     if args.dry_run:

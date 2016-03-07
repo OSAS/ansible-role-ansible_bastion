@@ -183,8 +183,10 @@ def extract_list_hosts_git(revision, path):
         return result
 
     # beware, not portable on windows
-    tmp_file = tempfile.NamedTemporaryFile()
+    tmp_file = tempfile.NamedTemporaryFile('w+')
     tmp_file.write(host_content)
+    tmp_file.flush()
+    os.fsync(tmp_file.fileno())
 
     variable_manager = VariableManager()
     loader = DataLoader()

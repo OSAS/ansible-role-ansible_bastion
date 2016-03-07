@@ -236,7 +236,7 @@ if 'hosts' in changed_files:
             # No need for a full fledged verification, just making
             # sure there is no funky chars for shell, and no space
             if re.search('^[\w.-]+$', hostname):
-                #avoid using the ssh stuff on salt bus host
+                # avoid using the ssh stuff on salt bus host
                 h = filter((lambda f: f['name'] == hostname), new)[0]
                 if h['connection'] == 'ssh':
                     commands_to_run.append("ssh -o "

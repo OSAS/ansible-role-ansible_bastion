@@ -193,11 +193,10 @@ def extract_list_hosts_git(revision, path):
 
     inventory = Inventory(loader=loader, variable_manager=variable_manager)
     inventory.parse_inventory(tmp_file.name)
-    for i in inventory.get_groups():
-        for j in inventory.get_hosts(i):
-            host = inventory.get_host(j)
+    for group in inventory.get_groups():
+        for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)
-            result.append({'name':j, 'connection': vars_host.get('ansible_connection', '')})
+            result.append({'name':host.name, 'connection': vars_host.get('ansible_connection', 'ssh')})
 
     return result
 
@@ -235,7 +234,8 @@ if 'hosts' in changed_files:
             # sure there is no funky chars for shell, and no space
             if re.search('^[\w.-]+$', hostname):
                 #avoid using the ssh stuff on salt bus host
-                if new[hostname].get('connection','ssh') == 'ssh':
+                h = filter((lambda f: f['name'] == hostname), new)[0]
+                if h['connection'] == 'ssh':
                     commands_to_run.append("ssh "
                                            "-o PreferredAuthentications=publickey "
                                            " -o StrictHostKeyChecking=no %s id"

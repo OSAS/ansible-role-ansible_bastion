@@ -196,7 +196,8 @@ def extract_list_hosts_git(revision, path):
     for group in inventory.get_groups():
         for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)
-            result.append({'name':host.name, 'connection': vars_host.get('ansible_connection', 'ssh')})
+            result.append({'name': host.name,
+                           'connection': vars_host.get('ansible_connection', 'ssh')})
 
     return result
 
@@ -225,8 +226,9 @@ for path in changed_files:
 if 'hosts' in changed_files:
     old = extract_list_hosts_git(args.old, args.git)
     new = extract_list_hosts_git(args.new, args.git)
+
     def get_hostname(x):
-        return x.get('name','')
+        return x.get('name', '')
     diff = Set(map(get_hostname, new)) - Set(map(get_hostname, old))
     if len(diff) > 0:
         for hostname in diff:
@@ -236,8 +238,8 @@ if 'hosts' in changed_files:
                 #avoid using the ssh stuff on salt bus host
                 h = filter((lambda f: f['name'] == hostname), new)[0]
                 if h['connection'] == 'ssh':
-                    commands_to_run.append("ssh "
-                                           "-o PreferredAuthentications=publickey "
+                    commands_to_run.append("ssh -o "
+                                           "PreferredAuthentications=publickey"
                                            " -o StrictHostKeyChecking=no %s id"
                                            % hostname)
 

@@ -43,9 +43,12 @@ from sets import Set
 import os
 import glob
 import subprocess
-import StringIO
-import ConfigParser
 import re
+import tempfile
+
+from ansible.inventory import Inventory
+from ansible.vars import VariableManager
+from ansible.parsing.dataloader import DataLoader
 
 import argparse
 parser = argparse.ArgumentParser(description="Run ansible playbooks based "
@@ -172,18 +175,28 @@ def extract_list_hosts_git(revision, path):
     if revision == '0000000000000000000000000000000000000000':
         return result
     try:
-        fp = StringIO.StringIO(subprocess.check_output(['git', 'show',
-                                                        '%s:hosts' % revision],
-                                                       cwd=path))
+        host_content = subprocess.check_output(['git', 'show',
+                                                '%s:hosts' % revision],
+                                               cwd=path)
     # usually, this is done when we can't check the list of hosts
     except subprocess.CalledProcessError:
         return result
 
-    cp = ConfigParser.RawConfigParser()
-    cp.readfp(fp)
-    for s in cp.sections():
-        result.add(cp.options(s)[0].split(' ')[0])
+    # beware, not portable on windows
+    tmp_file = tempfile.NamedTemporaryFile()
+    tmp_file.write(host_content)
+
+    variable_manager = VariableManager()
+    loader = DataLoader()
+
+    inventory = Inventory(loader=loader, variable_manager=variable_manager)
+    inventory.parse_inventory(tmp_file.name)
+    for i in inventory.get_groups():
+        for j in inventory.get_hosts(i):
+            result.add(j)
+
     return result
+
 
 changed_files = get_changed_files(args.git, args.old, args.new)
 

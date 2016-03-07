@@ -171,7 +171,7 @@ def get_changed_files(git_repo, old, new):
 
 
 def extract_list_hosts_git(revision, path):
-    result = Set()
+    result = []
     if revision == '0000000000000000000000000000000000000000':
         return result
     try:
@@ -193,7 +193,9 @@ def extract_list_hosts_git(revision, path):
     inventory.parse_inventory(tmp_file.name)
     for i in inventory.get_groups():
         for j in inventory.get_hosts(i):
-            result.add(j)
+            host = inventory.get_host(j)
+            vars_host = variable_manager.get_vars(loader, host=host)
+            result.append({'name':j, 'connection': vars_host.get('ansible_connection', '')})
 
     return result
 
@@ -222,16 +224,20 @@ for path in changed_files:
 if 'hosts' in changed_files:
     old = extract_list_hosts_git(args.old, args.git)
     new = extract_list_hosts_git(args.new, args.git)
-    diff = new - old
+    def get_hostname(x):
+        return x.get('name','')
+    diff = Set(map(get_hostname, new)) - Set(map(get_hostname, old))
     if len(diff) > 0:
         for hostname in diff:
             # No need for a full fledged verification, just making
             # sure there is no funky chars for shell, and no space
             if re.search('^[\w.-]+$', hostname):
-                commands_to_run.append("ssh "
-                                       "-o PreferredAuthentications=publickey "
-                                       " -o StrictHostKeyChecking=no %s id"
-                                       % hostname)
+                #avoid using the ssh stuff on salt bus host
+                if new[hostname].get('connection','ssh') == 'ssh':
+                    commands_to_run.append("ssh "
+                                           "-o PreferredAuthentications=publickey "
+                                           " -o StrictHostKeyChecking=no %s id"
+                                           % hostname)
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

@@ -197,7 +197,8 @@ def extract_list_hosts_git(revision, path):
         for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)
             result.append({'name': host.name,
-                           'connection': vars_host.get('ansible_connection', 'ssh')})
+                           'connection': vars_host.get('ansible_connection',
+                                                       'ssh')})
 
     return result
 

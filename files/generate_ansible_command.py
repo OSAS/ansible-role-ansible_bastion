@@ -200,6 +200,9 @@ def extract_list_hosts_git(revision, path):
                            'connection': vars_host.get('ansible_connection',
                                                        'ssh')})
 
+    # for some reason, there is some kind of global cache that need to be
+    # cleaned
+    inventory.refresh_inventory()
     return result
 
 

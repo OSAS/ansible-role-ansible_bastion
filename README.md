@@ -36,7 +36,7 @@ It is possible to push automatically the public repository to one or more
 distant git repository. To do that, please use the "remotes" variable like this:
 
 ```
-  - hosts: bastion.example.org
+- hosts: bastion.example.org
   roles:
   - role: bastion
     remotes:

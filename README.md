@@ -35,11 +35,13 @@ Pushing to remote repo
 It is possible to push automatically the public repository to one or more 
 distant git repository. To do that, please use the "remotes" variable like this:
 
+```
   - hosts: bastion.example.org
   roles:
   - role: bastion
     remotes:
     - { name: 'gitlab', url: 'git@gitlab.com:user/repo.git' }
+```
 
 You can specify multiple remotes in the list. A separate '_git_pusher' user is created 
 for that task, and a ssh key is generated for it. 

@@ -1,0 +1,8 @@
+---
+- name: Create dir for callback plugins
+  file: name=/etc/ansible/callback_plugins state=directory
+
+- name: Install callback plugins
+  copy: src={{ item }}  dest=/etc/ansible/callback_plugins/{{ item }}
+  with_items:
+  - lock_run.py

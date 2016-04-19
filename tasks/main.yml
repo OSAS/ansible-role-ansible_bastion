@@ -32,6 +32,8 @@
 
 - include: create_repos.yml
 
+- include: install_callback_plugins.yml 
+
 - name: Add post-receive hook to checkout playbooks
   template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/00_update_checkout.sh src=hooks/update_checkout.sh mode=0755
   with_items:

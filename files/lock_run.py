@@ -20,9 +20,9 @@
 # SOFTWARE.
 #
 #
-# This callback plugin just ensure that only 1 single instance of ansible is running
-# at a time by default. Since multiple people can push to the same repo, I do not
-# to have issues with multiple concurent runs
+# This callback plugin just ensure that only 1 single instance of ansible is
+# running # at a time by default. Since multiple people can push to the same
+# repo, I do not want to have issues with multiple concurent runs
 #
 
 from ansible.plugins.callback import CallbackBase
@@ -30,8 +30,10 @@ import os
 import sys
 import atexit
 
+
 class CallbackModule(CallbackBase):
     CALLBACK_NAME = 'lock'
+
     def __init__(self):
         super(CallbackModule, self).__init__()
 
@@ -40,8 +42,9 @@ class CallbackModule(CallbackBase):
             os.environ.get('XDG_RUNTIME_DIR', '~')))
         if os.path.exists(lock_file):
             # TODO verify if the PID in the file still exist
-            self._display.display("Deployment already started, exiting")        
-            self._display.display("Remove {} if you want to proceed".format(lock_file))        
+            self._display.display("Deployment already started, exiting")
+            self._display.display("Remove {} if you want to proceed".format(
+                lock_file))
             sys.exit(2)
 
         # TODO try/except, show a better error message

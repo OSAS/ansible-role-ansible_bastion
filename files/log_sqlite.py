@@ -74,9 +74,9 @@ class CallbackModule(CallbackBase):
         c = conn.cursor()
         c.execute('''INSERT INTO runs VALUES (?,?,?,?,?,?)''',
                   (self._stats['ok'], self._stats['failed'],
-                    self._stats['changed'],
-                    self._stats['date'], self._stats['date_human'],
-                    self._stats['playbook_file']))
+                   self._stats['changed'],
+                   self._stats['date'], self._stats['date_human'],
+                   self._stats['playbook_file']))
         conn.commit()
         conn.close()
 

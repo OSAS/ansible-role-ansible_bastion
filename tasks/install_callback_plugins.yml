@@ -6,3 +6,4 @@
   copy: src={{ item }}  dest=/etc/ansible/callback_plugins/{{ item }}
   with_items:
   - lock_run.py
+  - log_sqlite.py 

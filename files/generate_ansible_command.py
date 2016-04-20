@@ -45,6 +45,7 @@ import glob
 import subprocess
 import re
 import tempfile
+import fnmatch
 
 from ansible.inventory import Inventory
 from ansible.vars import VariableManager
@@ -228,7 +229,7 @@ for p in get_playbooks_to_run(args.path):
                 playbooks_to_run.add(p)
 
 for path in changed_files:
-    if glob.fnmatch.fnmatch(path, get_playbooks_to_run_pattern()):
+    if fnmatch.fnmatch(path, get_playbooks_to_run_pattern()):
         playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:

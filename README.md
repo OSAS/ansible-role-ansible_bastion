@@ -49,6 +49,21 @@ for that task, and a ssh key is generated for it.
 The playbook do not take care of setting the key on the other side, since that's typically
 used for various web services such as Github or Bitbucket, and that requires admin credentials.
 
+System users and groups
+-----------------------
+
+Several users will be created, depending on the settings used.
+
+* ansible_admin, (variable: ansible_username). This user is the
+one connecting to remote servers. A separate user is used for that to
+properly separate the access and reduce the risk of stealing the ssh keys.
+
+* _git_pusher, (variable pusher_username). This user is used to sync the public
+repo to a external source.
+
+* git, (variable git_username). When using the git-shell based set, this is the
+shared user used by commiters to push modifications.
+
 Directory layout
 ----------------
 

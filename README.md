@@ -47,7 +47,7 @@ You can specify multiple remotes in the list. A separate '_git_pusher' user is c
 for that task, and a ssh key is generated for it. 
 
 The playbook do not take care of setting the key on the other side, since that's typically
-used for various web services such as Github or Bitbucket, and that requires admin credentails.
+used for various web services such as Github or Bitbucket, and that requires admin credentials.
 
 Directory layout
 ----------------

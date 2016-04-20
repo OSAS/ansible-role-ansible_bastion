@@ -53,14 +53,18 @@
   - update_ansible_config.sh
 
 - template: src=update_galaxy.sudoers dest=/etc/sudoers.d/update_galaxy validate='visudo -cf %s'
+  name: Deploy sudo config for update galaxy
 
 - template: src={{ item }} dest=/usr/local/bin/{{ item }} mode=0755
   with_items:
   - file_changed_commit.sh
+  name: Deploy various scripts
 
 - cron: name="merge git {{ git_repositories_dir }}" job="/usr/local/bin/checkout_git_repos.sh {{ git_repositories_dir }}" minute=*/5
+  name: Add cron to merge change in git to /etc/ansible
 
-- cron:
+- name: Add cron to run ansible change every night
+  cron:
       name="ansible run"
       user={{ ansible_username }}
       job=/usr/local/bin/ansible_run_all.sh

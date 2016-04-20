@@ -28,7 +28,7 @@
 # - that a file /usr/local/bin/update_galaxy.sh can be run by sudo, and update
 #   the role tree. I want to not run it as root so that's required
 # - that playbooks are splitted in $CHECKOUT/playbooks, and that the playbook
-#   filename to deploy start by "deploy"
+#   filename to deploy start by "deploy", see get_playbooks_to_run_pattern
 # - that you are using a .yml extensions
 #
 # I keep a separate checkout from the main git repository due to the use of
@@ -66,6 +66,11 @@ parser.add_argument('--compat', default=False,
                     help="Activate compatibility mode", action="store_true")
 
 args = parser.parse_args()
+
+
+# TODO make the pattern configurable ?
+def get_playbooks_to_run_pattern():
+    return 'playbooks/deploy*.yml'
 
 
 cache_role_playbook = {}
@@ -147,9 +152,8 @@ def get_hosts_for_role(role, playbook_file):
     return result
 
 
-# TODO make the pattern configurable ?
-def get_playbooks_deploy(checkout_path):
-    return glob.glob('%s/playbooks/deploy*.yml' % checkout_path)
+def get_playbooks_to_run(checkout_path):
+    return glob.glob('%s/%s' % (checkout_path, get_playbooks_to_run_pattern()))
 
 
 def get_changed_files(git_repo, old, new):
@@ -214,7 +218,7 @@ limits = Set()
 
 commands_to_run = []
 update_requirements = False
-for p in get_playbooks_deploy(args.path):
+for p in get_playbooks_to_run(args.path):
     for path in changed_files:
         splitted_path = path.split('/')
         if path == 'requirements.yml':
@@ -224,7 +228,7 @@ for p in get_playbooks_deploy(args.path):
                 playbooks_to_run.add(p)
 
 for path in changed_files:
-    if path.startswith('playbooks/deploy') and path.endswith('.yml'):
+    if glob.fnmatch.fnmatch(path, get_playbooks_to_run_pattern()):
         playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:

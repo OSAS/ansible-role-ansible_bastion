@@ -74,3 +74,27 @@ repository need to follow a few set of rules:
  - requirement.yml can be safely used to update the roles
  - all playbooks are in playbooks/ and the one to be used for automated deployment
    are named with this pattern: deploy.\*.yml
+
+Groups based ACL
+----------------
+
+In order to ease collaboration and increase security, the repositories can be configured 
+to be writable by a specific group, with proper sudo configuration that avoid the need to use
+root user. 
+
+To enable this mode, you need to define the ansible_admin_group variable like this:
+
+```
+- hosts: bastion.example.org
+  roles:
+  - role: bastion
+    ansible_admin_group: admins
+```
+
+The group will be created if it doesn't already exist.
+
+By default, admins can only push and trigger the hooks, but you can also enable them
+to run various ansible command with the allow_ansible_commands variable. Be aware that 
+this is equivalent of giving them root access, since they can them do modification outside
+of the git repository.   
+ 

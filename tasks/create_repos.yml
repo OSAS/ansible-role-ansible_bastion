@@ -4,35 +4,11 @@
     path: "{{ git_repositories_dir }}"
     state: directory
 
-- name: Create each git repos
-  file: 
-    path: "{{ git_repositories_dir }}/{{ item }}"
-    state: directory 
-    group: "{{ ansible_admin_group | default(omit) }}"
-    mode: "u=rwx,g=rwxs"
+- include: create_repo.yml 
   with_items:
   - public
   - private
+  loop_control:
+    loop_var: repo
 
-- name: Initialize the git repos
-  shell: creates={{ git_repositories_dir }}/{{ item }}/config chdir={{ git_repositories_dir }}/{{ item }} git init --bare -q --shared=group
-  with_items:
-  - public
-  - private
 
-- name: Set git repos hooks
-  template: 
-    dest: "{{ git_repositories_dir }}/{{ item }}/hooks/post-receive"
-    src: hooks/post-receive.sh 
-    mode: 0755
-  with_items:
-  - public
-  - private
-
-- name: Set git repos hooks directories
-  file: 
-    path: "{{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/" 
-    state: directory
-  with_items:
-  - public
-  - private

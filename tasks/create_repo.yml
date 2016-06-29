@@ -1,0 +1,21 @@
+---
+- name: Create {{ repo }} git repos
+  file: 
+    path: "{{ git_repositories_dir }}/{{ repo }}"
+    state: directory 
+    group: "{{ ansible_admin_group | default(omit) }}"
+    mode: "u=rwx,g=rwxs"
+
+- name: Initialize the {{ repo }} git repos
+  shell: creates={{ git_repositories_dir }}/{{ repo }}/config chdir={{ git_repositories_dir }}/{{ repo }} git init --bare -q --shared=group
+
+- name: Set {{ repo }} git repos hooks
+  template: 
+    dest: "{{ git_repositories_dir }}/{{ repo }}/hooks/post-receive"
+    src: hooks/post-receive.sh 
+    mode: 0755
+
+- name: Set {{ repo }} git repos hooks directories
+  file: 
+    path: "{{ git_repositories_dir }}/{{ repo }}/hooks/post-receive.d/" 
+    state: directory

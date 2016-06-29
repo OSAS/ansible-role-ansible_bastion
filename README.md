@@ -98,3 +98,11 @@ to run various ansible command with the allow_ansible_commands variable. Be awar
 this is equivalent of giving them root access, since they can them do modification outside
 of the git repository.   
  
+SSH Key type
+------------
+
+By default, a RSA key is generated. If you wish to use another type of key, you can pass
+the option `ssh_key_type` to use a different type of key.
+
+This however requires a bugfix on ansible for the automated size selection of the key,
+sent as a PR on https://github.com/ansible/ansible-modules-core/pull/4074

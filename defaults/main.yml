@@ -25,3 +25,5 @@ git_username: git
 pusher_username: _git_pusher
 # permit admin to run ansible command from sudo
 allow_ansible_commands: False
+# permit to use a specific type of key
+ssh_key_type: rsa

@@ -1,8 +1,8 @@
 ---
 - name: Create {{ repo }} git repos
-  file: 
+  file:
     path: "{{ git_repositories_dir }}/{{ repo }}"
-    state: directory 
+    state: directory
     group: "{{ ansible_admin_group | default(omit) }}"
     mode: "u=rwx,g=rwxs"
 
@@ -25,4 +25,3 @@
   with_items:
   - post-receive
   - pre-receive
-

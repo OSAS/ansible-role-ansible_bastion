@@ -1,14 +1,12 @@
 ---
 - name: Create directory holding git repos
-  file: 
+  file:
     path: "{{ git_repositories_dir }}"
     state: directory
 
-- include: create_repo.yml 
+- include: create_repo.yml
   with_items:
   - public
   - private
   loop_control:
     loop_var: repo
-
-

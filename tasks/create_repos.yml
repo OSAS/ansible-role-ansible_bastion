@@ -1,9 +1,15 @@
 ---
 - name: Create directory holding git repos
-  file: path={{ git_repositories_dir }} state=directory
+  file: 
+    path: "{{ git_repositories_dir }}"
+    state: directory
 
 - name: Create each git repos
-  file: path={{ git_repositories_dir }}/{{ item }} state=directory group={{ ansible_admin_group | default(omit) }} mode="u=rwx,g=rwxs"
+  file: 
+    path: "{{ git_repositories_dir }}/{{ item }}"
+    state: directory 
+    group: "{{ ansible_admin_group | default(omit) }}"
+    mode: "u=rwx,g=rwxs"
   with_items:
   - public
   - private
@@ -15,13 +21,18 @@
   - private
 
 - name: Set git repos hooks
-  template: dest={{ git_repositories_dir }}/{{ item }}/hooks/post-receive src=hooks/post-receive.sh mode=0755
+  template: 
+    dest: "{{ git_repositories_dir }}/{{ item }}/hooks/post-receive"
+    src: hooks/post-receive.sh 
+    mode: 0755
   with_items:
   - public
   - private
 
 - name: Set git repos hooks directories
-  file: path={{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/ state=directory
+  file: 
+    path: "{{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/" 
+    state: directory
   with_items:
   - public
   - private

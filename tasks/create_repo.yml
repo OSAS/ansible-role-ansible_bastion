@@ -10,12 +10,19 @@
   shell: creates={{ git_repositories_dir }}/{{ repo }}/config chdir={{ git_repositories_dir }}/{{ repo }} git init --bare -q --shared=group
 
 - name: Set {{ repo }} git repos hooks
-  template: 
-    dest: "{{ git_repositories_dir }}/{{ repo }}/hooks/post-receive"
-    src: hooks/post-receive.sh 
+  template:
+    dest: "{{ git_repositories_dir }}/{{ repo }}/hooks/{{ item }}"
+    src: hooks/receive-hook.sh
     mode: 0755
+  with_items:
+  - post-receive
+  - pre-receive
 
 - name: Set {{ repo }} git repos hooks directories
-  file: 
-    path: "{{ git_repositories_dir }}/{{ repo }}/hooks/post-receive.d/" 
+  file:
+    path: "{{ git_repositories_dir }}/{{ repo }}/hooks/{{ item }}.d/"
     state: directory
+  with_items:
+  - post-receive
+  - pre-receive
+

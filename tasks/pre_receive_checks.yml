@@ -1,0 +1,6 @@
+---
+- name: Deploy the gitignore check
+  template:
+    dest: "{{ git_repositories_dir }}/public/hooks/pre-receive.d/01_check_git_ignore.py"
+    src: hooks/check_git_ignore.py
+    mode: 0755

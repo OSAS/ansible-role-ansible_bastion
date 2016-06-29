@@ -65,6 +65,8 @@
     src: hooks/trigger_run.sh
     mode: 0755
 
+- include: pre_receive_checks.yml
+
 - name: Deploy various helper scripts
   copy:
     src: "{{ item }}"

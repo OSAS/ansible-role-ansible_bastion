@@ -7,12 +7,12 @@ Architecture
 
 This role permit to install a trusted server that will deploy configurations
 and run playbooks safely without having to distribute ssh keys to every admin.
-It use for that 2 git repositories where a authorized user can push, 
-triggering a automated deployment using a script to deploy only where it is 
-needed ( ie, if you modify a role, only systems where the role is used will be 
+It use for that 2 git repositories where a authorized user can push,
+triggering a automated deployment using a script to deploy only where it is
+needed ( ie, if you modify a role, only systems where the role is used will be
 targeted ).
 
-The role use 2 git repositories, one named "public" and the other named 
+The role use 2 git repositories, one named "public" and the other named
 "private". As the name imply, the public repository is meant to be public and
 usually will contain everything that is not deemed private such as passwords. The
 private repository is used mostly for passwords, and should usually only
@@ -20,19 +20,19 @@ contains groups_vars/ or vars/ repository. A post commit hook will extract
 the 2 repositories in /etc/ansible, and run ansible if needed.
 
 For increased security, ansible is run as a non privileged user to reduce
-potential attack vectors from the managed system ( see CVE-2014-3498 ). 
-Others ideas are planned to be implemented. 
+potential attack vectors from the managed system ( see CVE-2014-3498 ).
+Others ideas are planned to be implemented.
 
 Variables
 ---------
 
-A few variables have been added to configure the role, please look at 
+A few variables have been added to configure the role, please look at
 defaults/main.yml
 
 Pushing to remote repo
 ----------------------
 
-It is possible to push automatically the public repository to one or more 
+It is possible to push automatically the public repository to one or more
 distant git repository. To do that, please use the "remotes" variable like this:
 
 ```
@@ -43,8 +43,8 @@ distant git repository. To do that, please use the "remotes" variable like this:
     - { name: 'gitlab', url: 'git@gitlab.com:user/repo.git' }
 ```
 
-You can specify multiple remotes in the list. A separate '_git_pusher' user is created 
-for that task, and a ssh key is generated for it. 
+You can specify multiple remotes in the list. A separate '_git_pusher' user is created
+for that task, and a ssh key is generated for it.
 
 The playbook do not take care of setting the key on the other side, since that's typically
 used for various web services such as Github or Bitbucket, and that requires admin credentials.
@@ -54,14 +54,14 @@ System users and groups
 
 Several users will be created, depending on the settings used.
 
-* ansible_admin, (variable: ansible_username). This user is the
+* ansible_admin, (variable: `ansible_username`). This user is the
 one connecting to remote servers. A separate user is used for that to
 properly separate the access and reduce the risk of stealing the ssh keys.
 
-* _git_pusher, (variable pusher_username). This user is used to sync the public
+* _git_pusher, (variable `pusher_username`). This user is used to sync the public
 repo to a external source.
 
-* git, (variable git_username). When using the git-shell based set, this is the
+* git, (variable `git_username`). When using the git-shell based set, this is the
 shared user used by commiters to push modifications.
 
 Directory layout
@@ -78,11 +78,11 @@ repository need to follow a few set of rules:
 Groups based ACL
 ----------------
 
-In order to ease collaboration and increase security, the repositories can be configured 
+In order to ease collaboration and increase security, the repositories can be configured
 to be writable by a specific group, with proper sudo configuration that avoid the need to use
-root user. 
+root user.
 
-To enable this mode, you need to define the ansible_admin_group variable like this:
+To enable this mode, you need to define the `ansible_admin_group` variable like this:
 
 ```
 - hosts: bastion.example.org
@@ -94,10 +94,10 @@ To enable this mode, you need to define the ansible_admin_group variable like th
 The group will be created if it doesn't already exist.
 
 By default, admins can only push and trigger the hooks, but you can also enable them
-to run various ansible command with the allow_ansible_commands variable. Be aware that 
+to run various ansible command with the `allow_ansible_commands` variable. Be aware that
 this is equivalent of giving them root access, since they can them do modification outside
-of the git repository.   
- 
+of the git repository.
+
 SSH Key type
 ------------
 

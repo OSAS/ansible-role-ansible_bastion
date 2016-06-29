@@ -10,6 +10,6 @@ Defaults!GENERATE_ANSIBLE_COMMAND !requiretty
 
 %{{ ansible_admin_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG, UPDATE_EXTERNAL_ROLES
 %{{ ansible_admin_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND
-{{ if allow_ansible_commands }}
+{% if allow_ansible_commands %}
 %{{ ansible_admin_group }}  ALL=({{ ansible_username }}) ANSIBLE_COMMAND
-{{ endif }}
+{% endif %}

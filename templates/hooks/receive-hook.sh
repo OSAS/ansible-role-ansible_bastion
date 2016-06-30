@@ -26,7 +26,7 @@
 HOOK_DIR=$(dirname $0)
 while read OLDREV NEWREV REF
 do
-    for script in $HOOK_DIR/{{ item }}.d/*sh ; do
+    for script in $HOOK_DIR/{{ item }}.d/*{sh,py} ; do
         echo $OLDREV $NEWREV $REF | $script
     done
 done

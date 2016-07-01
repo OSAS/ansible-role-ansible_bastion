@@ -1,8 +1,8 @@
-- set_fact: 
+- set_fact:
     checkout_dir: "/usr/local/src/ansible"
 
 - name: Install dependencies of ansible
-  package: 
+  package:
     name: "{{ item }}"
     state: present
   with_items:

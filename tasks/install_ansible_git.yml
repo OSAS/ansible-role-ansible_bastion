@@ -1,7 +1,10 @@
-- set_fact: checkout_dir=/usr/local/src/ansible
+- set_fact: 
+    checkout_dir: "/usr/local/src/ansible"
 
-- name: Install ansible deps from {{ ansible_pkg_mgr }}
-  action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
+- name: Install dependencies of ansible
+  package: 
+    name: "{{ item }}"
+    state: present
   with_items:
   - python-jinja2
   - python-paramiko
@@ -9,17 +12,25 @@
   - PyYAML
   - python-keyczar
 
-- git: repo=https://github.com/ansible/ansible.git dest={{ checkout_dir }}
-  name: Checkout git in {{ checkout_dir }}
+- name: Checkout git in {{ checkout_dir }}
+  git:
+    repo: "https://github.com/ansible/ansible.git"
+    dest: "{{ checkout_dir }}"
 
 - name: Create helper scripts
-  template: dest=/usr/local/bin/{{ item }} src={{ item }} mode=0755
+  template:
+    dest: "/usr/local/bin/{{ item }}"
+    src: "{{ item }}"
+    mode: 0755
   with_items:
   - ansible_git
   - ansible_git_update
 
 - name: Create compatibility links
-  file: dest=/usr/bin/{{ item }} src=/usr/local/bin/ansible_git state=link
+  file:
+    dest: "/usr/bin/{{ item }}"
+    src: /usr/local/bin/ansible_git
+    state: link
   with_items:
   - ansible
   - ansible-doc
@@ -29,7 +40,12 @@
   - ansible-vault
 
 - name: Create /etc/ansible directory
-  file: dest=/etc/ansible state=directory
+  file:
+    dest: /etc/ansible
+    state: directory
 
 - name: Set cron to automatically update the checkout
-  cron: name="update ansible git" minute=*/20 job=/usr/local/bin/ansible_git_update
+  cron:
+    name: "update ansible git"
+    minute: "*/20"
+    job: /usr/local/bin/ansible_git_update

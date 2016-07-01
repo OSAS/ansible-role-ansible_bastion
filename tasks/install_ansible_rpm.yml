@@ -1,6 +1,6 @@
-- name: Install ansible from rpm
-  action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
+- name: Install ansible from package
+  package:
+    name: "{{ item }}"
+    state: present
   with_items:
   - ansible
-
-

@@ -1,2 +1,3 @@
+# {{ ansible_managed }}
 Host *.{{ ansible_domain }}
     GSSAPIDelegateCredentials yes

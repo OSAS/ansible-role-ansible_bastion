@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# {{ ansible_managed }}
+#
 # Copyright (c) 2014 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy

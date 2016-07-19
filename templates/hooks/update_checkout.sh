@@ -22,4 +22,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #
+echo "* Extracting git repo in /etc/ansible"
 sudo -n /usr/local/bin/update_ansible_config.sh

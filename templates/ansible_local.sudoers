@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+Defaults!/usr/local/bin/ansible_local.py  !requiretty
+
+# in a ideal world, this would be restricted to the exact 3 number of file,
+# but this test is pushed in the wrapper script (who happen to run as root,
+# which is unfortunate from a design perspective, but unlikely to
+# cause trouble in practice
+{{ ansible_username }}  ALL = NOPASSWD: /usr/local/bin/ansible_local.py

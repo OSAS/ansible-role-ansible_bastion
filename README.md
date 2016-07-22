@@ -153,3 +153,14 @@ for all ssh outgoing connections. This can be done with the option `use_tor_prox
 
 This will install and start a tor client, and direct outgoing ssh connections in
 the tor network.
+
+Local deployment
+----------------
+
+When you have one single server to deploy, you can also use a alternate mode of operation.
+
+If a playbook named local.yml, or matching the hostname or the fqdn (ie, server.yml or
+server.example.org.yml), it will be executed locally with a custom wrapper as root, with
+the local connection plugin.
+
+The naming convention of the playbook mimic the one of ansible-pull.

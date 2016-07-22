@@ -48,6 +48,7 @@ import tempfile
 import fnmatch
 import syslog
 import sys
+import socket
 
 from ansible.inventory import Inventory
 from ansible.vars import VariableManager
@@ -95,6 +96,14 @@ def load_config(config_file):
 configuration = load_config(args.config)
 
 cache_role_playbook = {}
+
+
+def path_match_local_playbook(playbook_file):
+    fqdn = socket.getfqdn()
+    local_path = ['playbooks/' + i for i in ['local.yml',
+                                             fqdn + '.yml',
+                                             fqdn.split('.')[0] + '.yml']]
+    return playbook_file in local_path
 
 
 def parse_roles_playbook(playbook_file):
@@ -236,6 +245,7 @@ changed_files = get_changed_files(args.git, args.old, args.new)
 
 hosts_to_update = Set()
 playbooks_to_run = Set()
+local_playbooks_to_run = Set()
 limits = Set()
 
 commands_to_run = []
@@ -252,6 +262,9 @@ for p in get_playbooks_to_run(args.path):
 for path in changed_files:
     if fnmatch.fnmatch(path, configuration['deploy_pattern']):
         playbooks_to_run.add("%s/%s" % (args.path, path))
+
+    if path_match_local_playbook(path):
+        local_playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:
     old = extract_list_hosts_git(args.old, args.git)
@@ -288,6 +301,9 @@ for p in playbooks_to_run:
 
     else:
         commands_to_run.append('ansible-playbook -D %s' % p)
+
+for l in local_playbooks_to_run:
+    commands_to_run.append('sudo /usr/local/bin/ansible_local.py %s' % l)
 
 for c in commands_to_run:
     if args.dry_run:

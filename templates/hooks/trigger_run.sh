@@ -23,6 +23,7 @@
 # SOFTWARE.
 # 
 
+echo "* Triggering a run of ansible"
 while read OLDREV NEWREV REF
 do
         # run ansible

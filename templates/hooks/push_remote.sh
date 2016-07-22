@@ -23,4 +23,5 @@
 # SOFTWARE.
 #
 
+echo "* Pushing git commit to public repository"
 sudo -n -u {{ pusher_username }} /usr/local/bin/push_remote_public.sh

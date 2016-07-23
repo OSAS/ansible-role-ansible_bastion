@@ -40,7 +40,7 @@ for line in sys.stdin.readlines():
     last_ref = line.split(' ')[1]
 
 req = subprocess.check_output(['git', 'show', last_ref + ':requirements.yml'])
-doc = yaml.load(req)
+doc = yaml.safe_load(req)
 module_names = set([i['name'] for i in doc])
 
 gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore'])

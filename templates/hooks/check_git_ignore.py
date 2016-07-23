@@ -10,10 +10,10 @@
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,8 +27,8 @@
 # This script verify that all modules in requirements.yml are also
 # in the .gitignore file
 # It doesn't handle branch, and will only verify the last commit of a whole
-# series of patch, mostly because that's a minor issue (and because that's easier to 
-# code)
+# series of patch, mostly because that's a minor issue (and because that's
+# easier to code
 #
 
 import yaml
@@ -45,12 +45,14 @@ doc = yaml.load(req)
 module_names = sets.Set([i['name'] for i in doc])
 
 gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore'])
-ignored_dirs = sets.Set([l.replace('roles/','')  for l in gitignore.split('\n') if l.startswith("roles/")])
+ignored_dirs = sets.Set([l.replace('roles/', '') for l in gitignore.split('\n')
+                        if l.startswith("roles/")])
 
 diff = module_names.difference(ignored_dirs)
 if len(diff) > 0:
-    print "error, there is modules in requirements.yml who are not in .gitignore"
+    print "error, there is modules in requirements.yml " \
+          "who are not in .gitignore"
     print "please copy this:"
     for d in diff:
         print "roles/" + d
-    sys.exit(1) 
+    sys.exit(1)

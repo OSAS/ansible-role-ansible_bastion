@@ -32,7 +32,6 @@
 #
 
 import yaml
-import sets
 import sys
 import subprocess
 
@@ -42,11 +41,11 @@ for line in sys.stdin.readlines():
 
 req = subprocess.check_output(['git', 'show', last_ref + ':requirements.yml'])
 doc = yaml.load(req)
-module_names = sets.Set([i['name'] for i in doc])
+module_names = set([i['name'] for i in doc])
 
 gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore'])
-ignored_dirs = sets.Set([l.replace('roles/', '') for l in gitignore.split('\n')
-                        if l.startswith("roles/")])
+ignored_dirs = set([l.replace('roles/', '') for l in gitignore.split('\n')
+                    if l.startswith("roles/")])
 
 diff = module_names.difference(ignored_dirs)
 if len(diff) > 0:

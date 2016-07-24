@@ -144,3 +144,12 @@ server ansible_host=abcdefabcdef.onion
 [web]
 server
 ```
+
+Using tor for outgoing connections
+----------------------------------
+
+Alternatively, a way to hide the location of the management server is to use tor
+for all ssh outgoing connections. This can be done with the option `use_tor_proxy`.
+
+This will install and start a tor client, and direct outgoing ssh connections in
+the tor network.

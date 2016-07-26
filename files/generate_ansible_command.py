@@ -62,6 +62,8 @@ parser.add_argument("-n", "--dry-run", help="only show what would be done",
                     action="store_true")
 parser.add_argument('--path', help="path of the updated git checkout",
                     default="/etc/ansible")
+parser.add_argument('--config', help="path of the config file",
+                    default="/etc/ansible_bastion.yml")
 parser.add_argument('--git', help="git repository path", required=True)
 parser.add_argument('--old', help="git commit before the push", required=True)
 parser.add_argument('--new', default="HEAD", help="git commit after the push")
@@ -79,10 +81,18 @@ else:
         ' '.join(sys.argv())))
 
 
-# TODO make the pattern configurable ?
-def get_playbooks_to_run_pattern():
-    return 'playbooks/deploy*.yml'
+def load_config(config_file):
+    config = {}
+    if os.path.isfile(config_file):
+        config = yaml.safe_load(open(config_file, 'r'))
 
+    if 'deploy_pattern' not in config:
+        config['deploy_pattern'] = 'playbooks/deploy*.yml'
+
+    return config
+
+
+configuration = load_config(args.config)
 
 cache_role_playbook = {}
 
@@ -164,7 +174,8 @@ def get_hosts_for_role(role, playbook_file):
 
 
 def get_playbooks_to_run(checkout_path):
-    return glob.glob('%s/%s' % (checkout_path, get_playbooks_to_run_pattern()))
+    return glob.glob('%s/%s' % (checkout_path,
+                     configuration['deploy_pattern']))
 
 
 def get_changed_files(git_repo, old, new):
@@ -239,7 +250,7 @@ for p in get_playbooks_to_run(args.path):
                 playbooks_to_run.add(p)
 
 for path in changed_files:
-    if fnmatch.fnmatch(path, get_playbooks_to_run_pattern()):
+    if fnmatch.fnmatch(path, configuration['deploy_pattern']):
         playbooks_to_run.add("%s/%s" % (args.path, path))
 
 if 'hosts' in changed_files:

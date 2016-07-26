@@ -78,12 +78,16 @@
   - generate_ansible_command.py
   - update_galaxy.sh
   - update_ansible_config.sh
+  - ansible_local.py
 
-- name: Deploy sudo config for update galaxy
+- name: Deploy various sudo configs
   template:
-    src: update_galaxy.sudoers
-    dest: /etc/sudoers.d/update_galaxy
+    src: "{{ item }}.sudoers"
+    dest: "/etc/sudoers.d/{{ item }}"
     validate: 'visudo -cf %s'
+  with_items:
+  - update_galaxy
+  - ansible_local
 
 - name: Deploy various scripts
   template:

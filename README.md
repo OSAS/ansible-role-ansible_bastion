@@ -106,3 +106,14 @@ the option `ssh_key_type` to use a different type of key.
 
 This however requires a bugfix on ansible for the automated size selection of the key,
 sent as a PR on https://github.com/ansible/ansible-modules-core/pull/4074
+
+Local deployment
+----------------
+
+When you have one single server to deploy, you can also use a alternate mode of operation.
+
+If a playbook named local.yml, or matching the hostname or the fqdn (ie, server.yml or
+server.example.org.yml), it will be executed locally with a custom wrapper as root, with
+the local connection plugin.
+
+The naming convention of the playbook mimic the one of ansible-pull.

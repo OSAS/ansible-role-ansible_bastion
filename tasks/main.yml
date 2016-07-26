@@ -134,7 +134,7 @@
     minute: 0
 
 - include: git_shell.yml
-  when: use_git_shell is defined
+  when: use_git_shell
 
 - include: push_remote.yml
   when: remotes|length > 0

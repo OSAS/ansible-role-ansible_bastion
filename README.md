@@ -86,6 +86,29 @@ you want a different branch and/or version of ansible than the default of 'devel
 variable is passed to the 'git' ansible module, so it accept everything the module
 accept.
 
+Using git-shell
+---------------
+
+In order to not give full shell access to the deployment server, you may opt to use
+git-shell and a special git user, with the option `use_git_shell`.
+The addition of ssh keys to the git user is not handled by this role, but can be done
+rather trivially with the authorized_keys module of ansible.
+
+The git-shell give access to a few commands to update the externals roles, give help and
+list commands. More will be added as pattern of usage will emerge.
+
+You can also change the `git_username` variable to change the name of the user used to
+push. For example and if you want to confuse people, you can enable a cvs user to push
+on git repositories with git-shell like this:
+
+```
+- hosts bastion.example.org
+  roles:
+  - role: bastion
+    use_git_shell: True
+    git_username: cvs
+```
+
 Groups based ACL
 ----------------
 

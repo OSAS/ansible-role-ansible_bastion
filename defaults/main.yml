@@ -19,6 +19,8 @@ compat_disable: False
 use_ansible_git: False
 # the branch of ansible to use, if using the git version
 ansible_git_version: devel
+# install a git-shell on the git user
+use_git_shell: False
 # the username for remote pushing to git repos
 git_username: git
 # the username that will run the sync script that push to a remote repo

@@ -1,6 +1,9 @@
 ---
-- name: Deploy the gitignore check
+- name: Deploy the pre-receive check
   template:
-    dest: "{{ git_repositories_dir }}/public/hooks/pre-receive.d/01_check_git_ignore.py"
-    src: hooks/check_git_ignore.py
+    dest: "{{ git_repositories_dir }}/public/hooks/pre-receive.d/{{ item.order}}_{{ item.script }}"
+    src: hooks/{{ item.script }}
     mode: 0755
+  with_items:
+  - { order: '01', script: check_git_ignore.py }
+  - { order: '02', script: check_branch_master.py }

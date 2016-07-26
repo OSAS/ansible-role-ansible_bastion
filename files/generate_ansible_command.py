@@ -46,6 +46,8 @@ import subprocess
 import re
 import tempfile
 import fnmatch
+import syslog
+import sys
 
 from ansible.inventory import Inventory
 from ansible.vars import VariableManager
@@ -67,6 +69,14 @@ parser.add_argument('--compat', default=False,
                     help="Activate compatibility mode", action="store_true")
 
 args = parser.parse_args()
+
+if 'SUDO_USER' in os.environ:
+    syslog.syslog("Execution by {} with args: {}".format(
+        os.environ['SUDO_USER'],
+        ' '.join(sys.argv)))
+else:
+    syslog.syslog("Direct execution with args: {}".format(
+        ' '.join(sys.argv())))
 
 
 # TODO make the pattern configurable ?
@@ -272,4 +282,5 @@ for c in commands_to_run:
     if args.dry_run:
         print c
     else:
+        syslog.syslog("Running {}".format(c))
         subprocess.call(c.split(), cwd=args.path)

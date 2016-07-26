@@ -1,8 +1,8 @@
 ---
 - name: Install git
-  action: "{{ ansible_pkg_mgr }} pkg={{ item }} state=installed"
-  with_items:
-  - git
+  package:
+    name: git
+    state: present
 
 - name: Create ansible user {{ ansible_username }}
   user:

@@ -4,3 +4,4 @@
     state: present
   with_items:
   - ansible
+  - python-netaddr

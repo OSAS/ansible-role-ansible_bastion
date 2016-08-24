@@ -16,10 +16,10 @@
   when: ansible_admin_group is defined
 
 - include: install_ansible_rpm.yml
-  when: use_ansible_HEAD is not defined
+  when: not use_ansible_git
 
 - include: install_ansible_git.yml
-  when: use_ansible_HEAD is defined
+  when: use_ansible_git
 
 - name: Setup ssh config for {{ ansible_username }}
   template:

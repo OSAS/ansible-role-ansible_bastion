@@ -75,6 +75,17 @@ repository need to follow a few set of rules:
  - all playbooks are in playbooks/ and the one to be used for automated deployment
    are named with this pattern: deploy.\*.yml
 
+Using git snapshot of Ansible
+-----------------------------
+
+The role can also be used to install ansible right from git, using the HEAD of the
+devel branch by default.
+
+To do that, you can use the `use_ansible_git` flag, along `ansible_git_version` if
+you want a different branch and/or version of ansible than the default of 'devel'. This
+variable is passed to the 'git' ansible module, so it accept everything the module
+accept.
+
 Groups based ACL
 ----------------
 

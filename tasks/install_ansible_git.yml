@@ -17,6 +17,7 @@
   git:
     repo: "https://github.com/ansible/ansible.git"
     dest: "{{ checkout_dir }}"
+    version: "{{ ansible_git_version }}"
 
 - name: Create helper scripts
   template:

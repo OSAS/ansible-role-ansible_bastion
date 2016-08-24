@@ -11,6 +11,7 @@
   - python-httplib2
   - PyYAML
   - python-keyczar
+  - python-netaddr
 
 - name: Checkout git in {{ checkout_dir }}
   git:

@@ -117,3 +117,30 @@ the option `ssh_key_type` to use a different type of key.
 
 This however requires a bugfix on ansible for the automated size selection of the key,
 sent as a PR on https://github.com/ansible/ansible-modules-core/pull/4074
+
+Management of tor hidden services
+---------------------------------
+
+Since ansible is using ssh and ssh can be used with tor hidden services, you can
+choose to enable the support for tor hidden services by using the `enable_onion_support`
+option like this:
+
+```
+- hosts: bastion.example.org
+  roles:
+  - role: bastion
+    enable_onion_support: True
+```
+
+It will configure tor and ssh to use tor for accessing a .onion hostname.
+
+It can be used like this in hosts file, to connect to a server whose hidden service
+is abcdefabcdef.onion:
+
+```
+[all]
+server ansible_host=abcdefabcdef.onion
+
+[web]
+server
+```

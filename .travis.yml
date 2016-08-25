@@ -6,6 +6,7 @@ before_install:
 install:
   - pip install ansible-lint
   - pip install flake8
+  - ( cd .. ; git clone https://gitlab.com/osas/ansible-role-tor.git tor)
 script:
 # verify the syntax of the playbook
   - set -e ; for i in tasks/*.yml; do ansible-lint $i; done

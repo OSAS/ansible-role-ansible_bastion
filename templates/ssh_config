@@ -1,3 +1,8 @@
 # {{ ansible_managed }}
 Host *.{{ ansible_domain }}
     GSSAPIDelegateCredentials yes
+
+{% if enable_onion_support %}
+Host *.onion
+    ProxyCommand socat - SOCKS4A:localhost:%h:%p,socksport=9050
+{% endif %}

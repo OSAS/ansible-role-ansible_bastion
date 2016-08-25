@@ -27,3 +27,5 @@ pusher_username: _git_pusher
 allow_ansible_commands: False
 # permit to use a specific type of key
 ssh_key_type: rsa
+# add support for accessing .onion
+enable_onion_support: False

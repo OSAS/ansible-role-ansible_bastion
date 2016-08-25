@@ -29,3 +29,5 @@ allow_ansible_commands: False
 ssh_key_type: rsa
 # add support for accessing .onion
 enable_onion_support: False
+# for the ssh connection to go trough tor
+use_tor_proxy: False

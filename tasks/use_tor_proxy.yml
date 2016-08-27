@@ -1,0 +1,8 @@
+- name: Set proxy config to use tor
+  git_config:
+    scope: "global"
+    name: "{{ item }}.proxy"
+    value: "socks5h://127.0.0.1:9050"
+  with_items:
+  - http
+  - https

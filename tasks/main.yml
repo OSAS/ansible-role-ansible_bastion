@@ -8,7 +8,7 @@
   package:
     name: socat
     state: present
-  when: enable_onion_support
+  when: enable_onion_support or use_tor_proxy
 
 - name: Create ansible user {{ ansible_username }}
   user:

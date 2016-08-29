@@ -122,3 +122,6 @@
 
 - include: push_remote.yml
   when: remotes is defined
+
+- include: use_tor_proxy.yml
+  when: use_tor_proxy

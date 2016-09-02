@@ -117,6 +117,13 @@
     minute: "{{ ansible_run_minute | default(omit) }}"
     hour:   "{{ ansible_run_hour | default(omit) }}"
 
+- name: Add cron to update the modules every 6h
+  cron:
+    name: "ansible galaxy update"
+    user: "{{ ansible_username }}"
+    job:  "sudo /usr/local/bin/update_galaxy.sh"
+    hour:   "*/6"
+
 - include: git_shell.yml
   when: use_git_shell is defined
 

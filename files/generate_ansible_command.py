@@ -79,7 +79,7 @@ if 'SUDO_USER' in os.environ:
         ' '.join(sys.argv)))
 else:
     syslog.syslog("Direct execution with args: {}".format(
-        ' '.join(sys.argv())))
+        ' '.join(sys.argv)))
 
 
 def load_config(config_file):

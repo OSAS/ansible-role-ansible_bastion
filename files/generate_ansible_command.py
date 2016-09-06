@@ -226,8 +226,8 @@ def extract_list_hosts_git(revision, path):
     variable_manager = VariableManager()
     loader = DataLoader()
 
-    inventory = Inventory(loader=loader, variable_manager=variable_manager)
-    inventory.parse_inventory(tmp_file.name)
+    inventory = Inventory(loader=loader, variable_manager=variable_manager,
+                          host_list=tmp_file.name)
     for group in inventory.get_groups():
         for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)

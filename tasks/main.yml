@@ -86,6 +86,11 @@
   - update_ansible_config.sh
   - ansible_local.py
 
+- name: Deploy the library of function for bastion
+  copy:
+    src: bastion_lib.py
+    dest: /usr/local/lib/bastion_lib.py
+
 - name: Deploy various sudo configs
   template:
     src: "{{ item }}.sudoers"

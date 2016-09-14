@@ -44,17 +44,16 @@ import os
 import glob
 import subprocess
 import re
-import tempfile
 import fnmatch
 import syslog
 import sys
-import socket
-
-from ansible.inventory import Inventory
-from ansible.vars import VariableManager
-from ansible.parsing.dataloader import DataLoader
-
 import argparse
+
+# custom library
+sys.path.append('/usr/local/lib')
+from bastion_lib import extract_list_hosts_git, get_changed_files, \
+    path_match_local_playbook  # noqa: E402
+
 parser = argparse.ArgumentParser(description="Run ansible playbooks based "
                                              "on actual changes in git")
 parser.add_argument("-v", "--verbose", help="increase output verbosity",
@@ -96,14 +95,6 @@ def load_config(config_file):
 configuration = load_config(args.config)
 
 cache_role_playbook = {}
-
-
-def path_match_local_playbook(playbook_file):
-    fqdn = socket.getfqdn()
-    local_path = ['playbooks/' + i for i in ['local.yml',
-                                             fqdn + '.yml',
-                                             fqdn.split('.')[0] + '.yml']]
-    return playbook_file in local_path
 
 
 def parse_roles_playbook(playbook_file):
@@ -185,60 +176,6 @@ def get_hosts_for_role(role, playbook_file):
 def get_playbooks_to_run(checkout_path):
     return glob.glob('%s/%s' % (checkout_path,
                      configuration['deploy_pattern']))
-
-
-def get_changed_files(git_repo, old, new):
-    changed_files = Set()
-    if old == '0000000000000000000000000000000000000000':
-        old = subprocess.check_output(['git',
-                                       'rev-list',
-                                       '--max-parents=0',
-                                       'HEAD'], cwd=git_repo).strip()
-
-    diff = subprocess.check_output(["git", '--no-pager', 'diff',
-                                    "--name-status", "--diff-filter=ACDMR",
-                                    "%s..%s" % (old, new)], cwd=git_repo)
-    for l in diff.split('\n'):
-        if len(l) > 0:
-            (t, f) = l.split()
-            changed_files.add(f)
-    return changed_files
-
-
-def extract_list_hosts_git(revision, path):
-    result = []
-    if revision == '0000000000000000000000000000000000000000':
-        return result
-    try:
-        host_content = subprocess.check_output(['git', 'show',
-                                                '%s:hosts' % revision],
-                                               cwd=path)
-    # usually, this is done when we can't check the list of hosts
-    except subprocess.CalledProcessError:
-        return result
-
-    # beware, not portable on windows
-    tmp_file = tempfile.NamedTemporaryFile('w+')
-    tmp_file.write(host_content)
-    tmp_file.flush()
-    os.fsync(tmp_file.fileno())
-
-    variable_manager = VariableManager()
-    loader = DataLoader()
-
-    inventory = Inventory(loader=loader, variable_manager=variable_manager,
-                          host_list=tmp_file.name)
-    for group in inventory.get_groups():
-        for host in inventory.get_hosts(group):
-            vars_host = variable_manager.get_vars(loader, host=host)
-            result.append({'name': host.name,
-                           'connection': vars_host.get('ansible_connection',
-                                                       'ssh')})
-
-    # for some reason, there is some kind of global cache that need to be
-    # cleaned
-    inventory.refresh_inventory()
-    return result
 
 
 changed_files = get_changed_files(args.git, args.old, args.new)

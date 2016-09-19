@@ -23,5 +23,7 @@
 cd /etc/ansible
 
 for i in playbooks/deploy*.yml; do 
+    logger "Started run of $i in ansible_run_all.sh"
     ansible-playbook -D $i $*
+    logger "Finished run of $i in ansible_run_all.sh"
 done

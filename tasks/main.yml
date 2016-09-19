@@ -128,6 +128,7 @@
     user: "{{ ansible_username }}"
     job:  "sudo /usr/local/bin/update_galaxy.sh"
     hour:   "*/6"
+    minute: 0
 
 - include: git_shell.yml
   when: use_git_shell is defined

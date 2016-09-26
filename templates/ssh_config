@@ -3,10 +3,10 @@ Host *.{{ ansible_domain }}
     GSSAPIDelegateCredentials yes
 
 {% if enable_onion_support or use_tor_proxy %}
-{% if enable_onion_support %}
-Host *.onion
-{% else %}
+{% if use_tor_proxy %}
 Host *
+{% else %}
+Host *.onion
 {% endif %}
     ProxyCommand socat - SOCKS4A:localhost:%h:%p,socksport=9050
 {% endif %}

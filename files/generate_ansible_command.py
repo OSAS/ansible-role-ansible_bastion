@@ -67,8 +67,6 @@ parser.add_argument('--config', help="path of the config file",
 parser.add_argument('--git', help="git repository path", required=True)
 parser.add_argument('--old', help="git commit before the push", required=True)
 parser.add_argument('--new', default="HEAD", help="git commit after the push")
-parser.add_argument('--compat', default=False,
-                    help="Activate compatibility mode", action="store_true")
 
 args = parser.parse_args()
 
@@ -227,17 +225,7 @@ if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')
 
 for p in playbooks_to_run:
-    if args.compat:
-        for path in changed_files:
-            if path.startswith('roles/'):
-                for l in get_hosts_for_role(path.split('/')[1], p):
-                    limits.add(l)
-
-        for l in limits:
-            commands_to_run.append('ansible-playbook -D -l %s %s' % (l, p))
-
-    else:
-        commands_to_run.append('ansible-playbook -D %s' % p)
+    commands_to_run.append('ansible-playbook -D %s' % p)
 
 for l in local_playbooks_to_run:
     commands_to_run.append('sudo /usr/local/bin/ansible_local.py %s' % l)

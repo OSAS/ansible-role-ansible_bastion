@@ -96,6 +96,7 @@
     src: "{{ item }}.sudoers"
     dest: "/etc/sudoers.d/{{ item }}"
     validate: 'visudo -cf %s'
+    mode: 'ug+r'
   with_items:
   - update_galaxy
   - ansible_local

@@ -35,4 +35,4 @@
     dest: /etc/sudoers.d/push_remote_public
     src: push_remote_public.sudoers
     validate: 'visudo -cf %s'
-  when: ansible_admin_group is defined
+  when: ansible_committers_group is defined

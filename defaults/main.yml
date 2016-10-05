@@ -23,8 +23,6 @@ ansible_git_version: devel
 git_username: git
 # the username that will run the sync script that push to a remote repo
 pusher_username: _git_pusher
-# permit admin to run ansible command from sudo
-allow_ansible_commands: False
 # permit to use a specific type of key
 ssh_key_type: rsa
 # add support for accessing .onion

@@ -1,4 +1,17 @@
 ---
+- include: compat_ansible_admin_group.yml
+  when: ansible_admin_group is defined
+
+- name: Verify that the groups are all defined
+  fail:
+    msg: "ansible_admins_group is defined while ansible_committers_group is not"
+  when: ansible_admins_group is defined and ansible_committers_group is undefined
+
+- name: Fail is old option are used
+  fail:
+    msg: "allow_ansible_commands is deprecated, please see ansible_admins_group in README.md"
+  when: allow_ansible_commands is defined
+
 - name: Install tools
   package:
     name: "{{ item }}"
@@ -19,10 +32,15 @@
     generate_ssh_key: yes
     ssh_key_type: "{{ ssh_key_type }}"
 
-- name: Create {{ ansible_admin_group }} group
+- name: Create {{ ansible_admins_group }} group
   group:
-    name: "{{ ansible_admin_group }}"
-  when: ansible_admin_group is defined
+    name: "{{ ansible_admins_group }}"
+  when: ansible_admins_group is defined
+
+- name: Create {{ ansible_committers_group }} group
+  group:
+    name: "{{ ansible_committers_group }}"
+  when: ansible_committers_group is defined
 
 - include: install_ansible_rpm.yml
   when: not use_ansible_git
@@ -50,10 +68,10 @@
 
 - name: Add sudo config for admins
   template:
-    dest: "/etc/sudoers.d/{{ ansible_admin_group }}_cmd_config"
+    dest: "/etc/sudoers.d/{{ ansible_committers_group }}_cmd_config"
     src: cmd_config.sudoers
     validate: 'visudo -cf %s'
-  when: ansible_admin_group is defined
+  when: ansible_committers_group is defined
 
 - include: create_repos.yml
 

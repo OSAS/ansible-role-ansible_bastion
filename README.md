@@ -116,21 +116,39 @@ In order to ease collaboration and increase security, the repositories can be co
 to be writable by a specific group, with proper sudo configuration that avoid the need to use
 root user.
 
-To enable this mode, you need to define the `ansible_admin_group` variable like this:
+To enable this mode, you need to define the `ansible_commiters_group` variable like this:
 
 ```
 - hosts: bastion.example.org
   roles:
   - role: bastion
-    ansible_admin_group: admins
+    ansible_committers_group: committers
 ```
 
 The group will be created if it doesn't already exist.
 
-By default, admins can only push and trigger the hooks, but you can also enable them
-to run various ansible command with the `allow_ansible_commands` variable. Be aware that
-this is equivalent of giving them root access, since they can them do modification outside
-of the git repository.
+By default, committers can only push and trigger the hooks, and this mean everything
+they do will be properly audited in git, and run with verification.
+
+If you want to be able to do more, you can also create a group for admins who will have
+more privileges such as running variables ansible commands, which would be equivalent to becoming
+root.
+
+To do that, you can use the `ansible_admins_group` variables like this:
+
+```
+- hosts: bastion.example.org
+  roles:
+  - role: bastion
+    ansible_committers_group: committers
+    ansible_admins_group: admins
+```
+
+Like with `ansible_committers_group`, the group will be created if it doesn't exist. Due
+to the way group are currently done on Linux, people in the `ansible_admins_group` do
+not automatically inherit the access of `ansible_committers_group` for the moment.
+
+The role will refuse to deploy anything if only `ansible_admins_group` is defined.
 
 SSH Key type
 ------------

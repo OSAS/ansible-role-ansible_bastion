@@ -3,7 +3,7 @@
   file:
     path: "{{ git_repositories_dir }}/{{ repo }}"
     state: directory
-    group: "{{ ansible_admin_group | default(omit) }}"
+    group: "{{ ansible_committers_group | default(omit) }}"
     mode: "u=rwx,g=rwxs"
 
 - name: Initialize the {{ repo }} git repos

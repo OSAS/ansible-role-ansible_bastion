@@ -1,0 +1,7 @@
+- name: Display message about deprecated variable
+  pause:
+    seconds: 30
+    prompt: "The variable ansible_admin_group is deprecated, please convert to ansible_committers_group"
+
+- set_fact:
+    ansible_committers_group: "{{ ansible_admin_group }}"

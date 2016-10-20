@@ -5,6 +5,7 @@ before_install:
  - sudo apt-get update -qq
 install:
   - pip install ansible-lint
+  - pip install --upgrade https://releases.ansible.com/ansible/ansible-2.2.0.0-0.2.rc2.tar.gz
   - pip install flake8
   - ( cd .. ; git clone https://gitlab.com/osas/ansible-role-tor.git tor)
 script:

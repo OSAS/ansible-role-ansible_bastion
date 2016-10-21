@@ -1,0 +1,35 @@
+language: none
+
+
+build:
+  pre_ci:
+  pre_ci_boot:
+    image_name: quay.io/osas/test-ansible-role_image-builder
+    image_tag: latest
+    pull: true
+    # we need a terminal or certain libc functions will fail
+    options: "-ti"
+  ci:
+    # debug info
+    - id
+    - export
+# install deps
+    - (cd .. ; git clone https://gitlab.com/osas/ansible-role-tor.git tor)
+    - yum -y install e2fsprogs
+    - lsattr /usr/lib64/python2.7/site-packages/pycrypto-2.6.1-py2.7.egg-info | awk '$1~/[ia]/'
+# prepare the tools
+    - run_tests setup
+# do the tests
+    - run_tests preflight
+    - run_tests deploy
+
+
+integrations:
+  notifications:
+    - integrationName: email
+      type: email
+      on_success: never
+      on_failure: never
+      on_start: never
+      on_pull_request: never
+

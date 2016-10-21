@@ -1,8 +1,11 @@
 ---
-- name: Install git
+- name: Install tools
   package:
-    name: git
+    name: "{{ item }}"
     state: present
+  with_items:
+    - git
+    - sudo
 
 - name: Install socat
   package:

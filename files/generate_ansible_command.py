@@ -172,8 +172,14 @@ def get_hosts_for_role(role, playbook_file):
 
 
 def get_playbooks_to_run(checkout_path):
-    return glob.glob('%s/%s' % (checkout_path,
-                     configuration['deploy_pattern']))
+    # this list compriehension filter from potentially hostile filename
+    # since the list is fed to a shell command, I filter to have only safe
+    # chars.
+    # do not authorize \s in filename, since this interact badly with shell
+    # later
+    return [g for g in glob.glob('%s/%s' % (checkout_path,
+                                 configuration['deploy_pattern']))
+            if re.search('^[\w/.-]+$', g)]
 
 
 changed_files = get_changed_files(args.git, args.old, args.new)

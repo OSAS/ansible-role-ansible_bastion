@@ -11,7 +11,7 @@ Defaults!GENERATE_ANSIBLE_COMMAND !requiretty
 %{{ ansible_committers_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG, UPDATE_EXTERNAL_ROLES
 %{{ ansible_committers_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND
 
-{% if ansible_admins_group %}
+{% if ansible_admins_group is defined %}
 Cmnd_Alias ANSIBLE_COMMAND = /usr/bin/ansible,/usr/bin/ansible-playbook
 %{{ ansible_admins_group }}  ALL=({{ ansible_username }}) NOPASSWD: ANSIBLE_COMMAND
 {% endif %}

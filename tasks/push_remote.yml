@@ -15,7 +15,7 @@
     option: url
     value: "{{ item.url}}"
     section: "remote \"{{ item.name }}\""
-  with_items: remotes
+  with_items: "{{ remotes }}"
 
 - name: Set the push.default config to simple
   ini_file:

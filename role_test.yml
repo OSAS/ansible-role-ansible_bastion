@@ -1,0 +1,24 @@
+---
+- hosts: 127.0.0.1
+  remote_user: root
+  roles:
+# test case: basic
+  - role: <ROLE_NAME>
+# test case: Ansible from git
+  - role: <ROLE_NAME>
+    use_ansible_git: True
+# test case: no compat
+  - role: <ROLE_NAME>
+    compat_disable: True
+# test case: security options
+  - role: <ROLE_NAME>
+    ansible_admin_group: admins
+    allow_ansible_commands: True
+    ssh_key_type: ecdsa
+# test case: onion support
+  - role: <ROLE_NAME>
+    enable_onion_support: True
+# test case: Tor proxy support
+  - role: <ROLE_NAME>
+    use_tor_proxy: True
+

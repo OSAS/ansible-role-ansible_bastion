@@ -137,7 +137,7 @@
   when: use_git_shell is defined
 
 - include: push_remote.yml
-  when: remotes is defined
+  when: remotes|length > 0
 
 - include: use_tor_proxy.yml
   when: use_tor_proxy

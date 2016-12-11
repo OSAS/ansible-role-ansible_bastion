@@ -41,6 +41,12 @@
   - ansible-pull
   - ansible-vault
 
+- name: Create link for library
+  file:
+    dest: /usr/local/lib/ansible
+    src:  /usr/local/src/ansible/lib/ansible
+    state: link
+
 - name: Create /etc/ansible directory
   file:
     dest: /etc/ansible

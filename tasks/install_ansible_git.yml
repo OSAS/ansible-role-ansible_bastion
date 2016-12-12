@@ -13,6 +13,11 @@
   - python-keyczar
   - python-netaddr
 
+- name: Remove ansible package
+  package:
+    name: ansible
+    state: absent
+
 - name: Checkout git in {{ checkout_dir }}
   git:
     repo: "https://github.com/ansible/ansible.git"

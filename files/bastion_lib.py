@@ -48,8 +48,14 @@ def get_changed_files(git_repo, old, new):
                                     "%s..%s" % (old, new)], cwd=git_repo)
     for l in diff.split('\n'):
         if len(l) > 0:
-            (t, f) = l.split()
-            changed_files.add(f)
+            splitted = l.split()
+            if len(splitted) == 2:
+                (t, filename) = splitted
+                changed_files.add(filename)
+            elif len(splitted) == 3:
+                (t, old_filename, new_filename) = splitted
+                changed_files.add(old_filename)
+                changed_files.add(new_filename)
     return changed_files
 
 

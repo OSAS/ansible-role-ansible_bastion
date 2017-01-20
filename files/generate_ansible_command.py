@@ -86,6 +86,8 @@ def load_config(config_file):
 
     if 'deploy_pattern' not in config:
         config['deploy_pattern'] = 'playbooks/deploy*.yml'
+    if 'run_on_new_host' not in config:
+        config['run_on_new_host'] = []
 
     return config
 
@@ -226,6 +228,10 @@ if 'hosts' in changed_files:
                                            "PreferredAuthentications=publickey"
                                            " -o StrictHostKeyChecking=no %s id"
                                            % (h['ssh_args'], hostname))
+
+        for p in get_playbooks_to_run(args.path):
+            if os.path.basename(p) in configuration['run_on_new_host']:
+                playbooks_to_run.add(p)
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

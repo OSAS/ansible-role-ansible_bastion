@@ -33,3 +33,5 @@ enable_onion_support: False
 use_tor_proxy: False
 # list of remote repository to push after a successfull run
 remotes: []
+#list of playbook to run when a new host is added
+run_on_new_host: []

@@ -222,10 +222,10 @@ if 'hosts' in changed_files:
                 # avoid using the ssh stuff on salt bus host
                 h = filter((lambda f: f['name'] == hostname), new)[0]
                 if h['connection'] == 'ssh':
-                    commands_to_run.append("ssh -o "
+                    commands_to_run.append("ssh %s -o "
                                            "PreferredAuthentications=publickey"
                                            " -o StrictHostKeyChecking=no %s id"
-                                           % hostname)
+                                           % (h['ssh_args'], hostname))
 
 if update_requirements:
     commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')

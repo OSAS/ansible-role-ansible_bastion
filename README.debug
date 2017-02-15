@@ -1,0 +1,8 @@
+In order to debug the generate ansible script, you can use this:
+
+export PYTHONPATH=./files 
+export GIT_CHECKOUT=../ansible_gluster
+python ./files/generate_ansible_command.py --git $GIT_CHECKOUT --path $GIT_CHECKOUT --old 832fcdece904715245af86567463a75255312b3d -n -v 
+
+
+This will just show the command to be executed, from a local checkout of the repo (in this case, in ../ansible_gluster).

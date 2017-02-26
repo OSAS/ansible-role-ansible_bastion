@@ -7,6 +7,7 @@ Defaults!UPDATE_ANSIBLE_CONFIG    !requiretty
 
 Cmnd_Alias GENERATE_ANSIBLE_COMMAND = /usr/local/bin/generate_ansible_command.py
 Defaults!GENERATE_ANSIBLE_COMMAND !requiretty
+Defaults!GENERATE_ANSIBLE_COMMAND env_keep=ANSIBLE_FORCE_COLOR
 
 Cmnd_Alias CLEAN_SSH_PUBLIC_KEYS = /usr/local/bin/clean_ssh_public_keys.py
 Defaults!CLEAN_SSH_PUBLIC_KEYS !requiretty

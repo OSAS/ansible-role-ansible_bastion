@@ -7,6 +7,7 @@ Defaults!UPDATE_ANSIBLE_CONFIG    !requiretty
 
 Cmnd_Alias GENERATE_ANSIBLE_COMMAND = /usr/local/bin/generate_ansible_command.py
 Defaults!GENERATE_ANSIBLE_COMMAND !requiretty
+Defaults!GENERATE_ANSIBLE_COMMAND env_keep=ANSIBLE_FORCE_COLOR
 
 %{{ ansible_committers_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG, UPDATE_EXTERNAL_ROLES
 %{{ ansible_committers_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND

@@ -106,6 +106,7 @@
   - update_galaxy.sh
   - update_ansible_config.sh
   - ansible_local.py
+  - clean_public_ssh_keys.py
 
 - name: Deploy the library of function for bastion
   copy:

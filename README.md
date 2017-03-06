@@ -205,3 +205,24 @@ server.example.org.yml), it will be executed locally with a custom wrapper as ro
 the local connection plugin.
 
 The naming convention of the playbook mimic the one of ansible-pull.
+
+Adding a new host to be managed
+-------------------------------
+
+If a new host is added to the hosts file, the system will automatically try to connect
+to it to add its ssh public key to the known_hosts file. This will by default generate
+a harmess error message for the time being.
+
+If the option `run_on_new_host` is set, the playbook listed will also be run. This can
+be used to autoimatically add more ssh keys or automatically add the new server to FreeIPA.
+
+It can be used like this:
+
+```
+- hosts: bastion.example.org
+  roles:
+  - role: bastion
+    run_on_new_host:
+    - deploy_base.yml
+    - deploy_freeipa.yml
+```

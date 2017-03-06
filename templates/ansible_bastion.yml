@@ -1,0 +1,6 @@
+{% if run_on_new_host|length > 0 %}
+run_on_new_host:
+{% for i in run_on_new_host %}
+- {{ i }}
+{% endfor %}
+{% endif %}

@@ -59,6 +59,12 @@
     src: ansible.cfg
     mode: 0755
 
+- name: Setup the bastion configuration file
+  template:
+    dest: /etc/ansible_bastion.yml
+    src: ansible_bastion.yml
+    mode: 0644
+
 - name: Create cache folder {{ cache_folder }}
   file:
     path: "{{ cache_folder }}"

@@ -23,6 +23,14 @@
   - help
   - update_external_roles
 
+- name: Copy templated command in the git-shell-commands directory
+  template:
+    dest: "{{ git_home }}/git-shell-commands/{{ item }}"
+    src: "{{ item }}"
+    mode: "0755"
+  with_items:
+  - clean_ssh_public_keys
+
 - name: Link repositories in the home
   file:
     state: link

@@ -48,7 +48,6 @@ import fnmatch
 import syslog
 import sys
 import argparse
-import shlex
 
 # custom library
 sys.path.append('/usr/local/lib')
@@ -235,28 +234,36 @@ if 'hosts' in changed_files:
                 # avoid using the ssh stuff on salt bus host
                 h = filter((lambda f: f['name'] == hostname), new)[0]
                 if h['connection'] == 'ssh':
-                    commands_to_run.append("ssh %s -o "
-                                           "PreferredAuthentications=publickey"
-                                           " -o StrictHostKeyChecking=no %s id"
-                                           % (h['ssh_args'], hostname))
+                    commands_to_run.append(["ssh", h['ssh_args'], "-o",
+                                           "PreferredAuthentications=publickey",
+                                           "-o", "StrictHostKeyChecking=no",
+                                           hostname, "id"])
 
         for p in get_playbooks_to_run(args.path):
             if os.path.basename(p) in configuration['run_on_new_host']:
                 playbooks_to_run.add(p)
 
 if update_requirements:
-    commands_to_run.append('sudo /usr/local/bin/update_galaxy.sh')
+    commands_to_run.append({'cmd': ['sudo',
+                                    '/usr/local/bin/update_galaxy.sh']})
 
 for p in playbooks_to_run:
     if os.path.exists(p):
-        commands_to_run.append('ansible-playbook -D %s' % p)
+        commands_to_run.append({'cmd': ['ansible-playbook', '-D',  p]})
 
 for p in local_playbooks_to_run:
-    commands_to_run.append('sudo /usr/local/bin/ansible_local.py %s' % p)
+    commands_to_run.append({'cmd':
+                            ['sudo', '/usr/local/bin/ansible_local.py', p]})
 
 for c in commands_to_run:
+    env_str = ' '.join([k + '=' + v for k, v in c.get('env', {}).iteritems()])
+    cmd_str = '{} {}'.format(env_str, ' '.join(c['cmd']))
     if args.dry_run:
-        print c
+        print cmd_str
     else:
-        syslog.syslog("Running {}".format(c))
-        subprocess.call(shlex.split(c), cwd=args.path)
+        syslog.syslog("Running {}".format(cmd_str))
+        env = os.environ.copy()
+        env.update(c.get('env', {}))
+        subprocess.call(c['cmd'],
+                        env=env,
+                        cwd=args.path)

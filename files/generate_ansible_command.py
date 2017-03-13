@@ -80,9 +80,13 @@ else:
 
 
 def load_config(config_file):
-    config = {}
+    config = None
     if os.path.isfile(config_file):
         config = yaml.safe_load(open(config_file, 'r'))
+    # keep this conditional, since yaml.safe_load return None
+    # for a empty file
+    if config is None:
+        config = {}
 
     if 'deploy_pattern' not in config:
         config['deploy_pattern'] = 'playbooks/deploy*.yml'

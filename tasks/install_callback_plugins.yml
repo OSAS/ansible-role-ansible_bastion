@@ -1,13 +1,22 @@
 ---
+# remove after september 2017
+- name: Cleanup old callbacks
+  file:
+    name: "/etc/ansible/callback_plugins/{{ item }}"
+    state: absent
+  with_items:
+  - lock_run.py
+  - log_sqlite.py
+
 - name: Create dir for callback plugins
   file:
-    name: /etc/ansible/callback_plugins
+    name: "~{{ ansible_username }}/.ansible/plugins/callback"
     state: directory
 
 - name: Install callback plugins
   copy:
-    src: "{{ item }}"
-    dest: "/etc/ansible/callback_plugins/{{ item }}"
+    src: "callback/{{ item }}"
+    dest: "~{{ ansible_username }}/.ansible/plugins/callback/{{ item }}"
   with_items:
   - lock_run.py
   - log_sqlite.py

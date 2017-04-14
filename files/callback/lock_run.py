@@ -37,7 +37,7 @@ class CallbackModule(CallbackBase):
     def __init__(self):
         super(CallbackModule, self).__init__()
 
-    def v2_playbook_on_play_start(self, play):
+    def v2_playbook_on_start(self, playbook):
         lock_file = os.path.expanduser('{}/ansible_run_lock'.format(
             os.environ.get('XDG_RUNTIME_DIR', '~')))
         if os.path.exists(lock_file):

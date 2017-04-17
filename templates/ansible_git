@@ -25,4 +25,5 @@
 
 cd "{{ checkout_dir }}"
 source hacking/env-setup -q
+cd -
 $(basename $0) $*

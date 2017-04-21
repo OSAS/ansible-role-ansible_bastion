@@ -12,8 +12,10 @@ Defaults!GENERATE_ANSIBLE_COMMAND env_keep=ANSIBLE_FORCE_COLOR
 Cmnd_Alias CLEAN_SSH_PUBLIC_KEYS = /usr/local/bin/clean_ssh_public_keys.py
 Defaults!CLEAN_SSH_PUBLIC_KEYS !requiretty
 
-%{{ ansible_committers_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG, UPDATE_EXTERNAL_ROLES
-%{{ ansible_committers_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND, CLEAN_SSH_PUBLIC_KEYS
+%{{ ansible_committers_group }}  ALL=(root) NOPASSWD: UPDATE_ANSIBLE_CONFIG
+%{{ ansible_committers_group }}  ALL=(root) NOPASSWD: UPDATE_EXTERNAL_ROLES
+%{{ ansible_committers_group }}  ALL=({{ ansible_username }}) NOPASSWD: GENERATE_ANSIBLE_COMMAND, 
+%{{ ansible_committers_group }}  ALL=({{ ansible_username }}) NOPASSWD: CLEAN_SSH_PUBLIC_KEYS
 
 {% if ansible_admins_group is defined %}
 Cmnd_Alias ANSIBLE_COMMAND = /usr/bin/ansible,/usr/bin/ansible-playbook

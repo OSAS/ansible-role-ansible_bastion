@@ -25,7 +25,7 @@ import sys
 import re
 import subprocess
 
-if len(sys.argv) != 1:
+if len(sys.argv) != 2:
     print "Usage: clean_public_ssh_keys.py hostname"
     print "Remove the hostname from .ssh/known_hosts"
     sys.exit(1)

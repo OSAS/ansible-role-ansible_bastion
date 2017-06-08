@@ -29,6 +29,7 @@ from ansible.parsing.dataloader import DataLoader
 import subprocess
 import tempfile
 import socket
+import shutil
 import os
 from sets import Set
 
@@ -74,7 +75,8 @@ def extract_list_hosts_git(revision, path):
         return result
 
     # beware, not portable on windows
-    tmp_file = tempfile.NamedTemporaryFile('w+')
+    tmp_dir = tempfile.mkdtemp()
+    tmp_file = tempfile.NamedTemporaryFile('w+', dir=tmp_dir)
     tmp_file.write(host_content)
     tmp_file.flush()
     os.fsync(tmp_file.fileno())
@@ -95,6 +97,8 @@ def extract_list_hosts_git(revision, path):
     # for some reason, there is some kind of global cache that need to be
     # cleaned
     inventory.refresh_inventory()
+    shutil.rmtree(tmp_dir)
+
     return result
 
 

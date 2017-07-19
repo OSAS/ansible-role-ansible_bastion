@@ -48,6 +48,7 @@ import fnmatch
 import syslog
 import sys
 import argparse
+import shlex
 
 # custom library
 sys.path.append('/usr/local/lib')
@@ -252,4 +253,4 @@ for c in commands_to_run:
         print c
     else:
         syslog.syslog("Running {}".format(c))
-        subprocess.call(c.split(), cwd=args.path)
+        subprocess.call(shlex.split(c), cwd=args.path)

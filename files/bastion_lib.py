@@ -97,6 +97,14 @@ def extract_list_hosts_git(revision, path):
     # for some reason, there is some kind of global cache that need to be
     # cleaned
     inventory.refresh_inventory()
+    # we need to del the temporary file before the directory, or a exception
+    # is launched and ignored:
+    #   Exception OSError: (2, 'No such file or directory',
+    #   '/tmp/tmpw2IQjN/tmppHjNDO') #   in <bound method
+    #   _TemporaryFileWrapper.__del__ of <closed file '<fdopen>',
+    #   mode 'w+' at 0x2cfd6f0>> ignored
+    #
+    del tmp_file
     shutil.rmtree(tmp_dir)
 
     return result

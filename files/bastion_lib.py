@@ -22,16 +22,75 @@
 # List of function split from generate_ansible_command.py
 # to be reused by others scripts
 
-from ansible.inventory import Inventory
-from ansible.vars import VariableManager
-from ansible.parsing.dataloader import DataLoader
-
 import subprocess
 import tempfile
 import socket
 import shutil
 import os
 from sets import Set
+
+from ansible.parsing.dataloader import DataLoader
+
+# TODO get ride of compat code around 2018
+ANSIBLE_24 = False
+try:
+    from ansible.inventory import Inventory
+except ImportError:
+    ANSIBLE_24 = True
+    from ansible.inventory.manager import InventoryManager
+
+try:
+    from ansible.vars import VariableManager
+except ImportError:
+    from ansible.vars.manager import VariableManager
+
+
+class VariableManagerWrapper:
+    def __init__(self, vm):
+        self.vm = vm
+
+    def get_vars(self, loader, host):
+        if ANSIBLE_24:
+            return self.vm.get_vars(host=host)
+        else:
+            return self.vm.get_vars(loader, host=host)
+
+
+class InventoryWrapper:
+    def __init__(self, host_list):
+        self.loader = DataLoader()
+        # this code is a bit ugly, because Ansible 2.4 switched the order
+        # of the object and the pattern (InventoryManager is a argument to
+        # VariableManager, and vice-versa on version <2.3)
+        if ANSIBLE_24:
+            self.im = InventoryManager(loader=self.loader,
+                                       sources=[host_list, ])
+            self.vm = VariableManager(loader=self.loader, inventory=self.im)
+        else:
+            self.vm = VariableManager()
+            self.im = Inventory(self.loader, self.vm, host_list)
+
+    def get_loader(self):
+        return self.loader
+
+    def get_variable_manager(self):
+        return VariableManagerWrapper(self.vm)
+
+    def get_groups(self):
+        if ANSIBLE_24:
+            return self.im.groups
+        return self.im.get_groups()
+
+    def get_hosts(self, group):
+        if ANSIBLE_24:
+            return self.im.get_hosts(pattern=group)
+        return self.im.get_hosts(group)
+
+    def get_host(self, host):
+        return self.im.get_host(host)
+
+    def refresh_inventory(self):
+        return self.im.refresh_inventory()
 
 
 def get_changed_files(git_repo, old, new):
@@ -81,11 +140,10 @@ def extract_list_hosts_git(revision, path):
     tmp_file.flush()
     os.fsync(tmp_file.fileno())
 
-    variable_manager = VariableManager()
-    loader = DataLoader()
+    inventory = InventoryWrapper(host_list=tmp_file.name)
+    variable_manager = inventory.get_variable_manager()
+    loader = inventory.get_loader()
 
-    inventory = Inventory(loader=loader, variable_manager=variable_manager,
-                          host_list=tmp_file.name)
     for group in inventory.get_groups():
         for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)

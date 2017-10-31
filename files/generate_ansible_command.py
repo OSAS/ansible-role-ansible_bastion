@@ -109,6 +109,9 @@ def parse_roles_playbook(playbook_file):
     playbook = yaml.load(open(playbook_file, 'r'))
     result = {}
 
+    if playbook is None:
+        return result
+
     for doc in playbook:
         host = doc['hosts']
         roles = Set()

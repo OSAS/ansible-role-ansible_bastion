@@ -29,7 +29,10 @@ do
     for script in $HOOK_DIR/{{ item }}.d/*{sh,py} ; do
         if [ -f $script -a -x $script ]; then
             echo $OLDREV $NEWREV $REF | $script
-            if [[ $? -ne 0 ]] ; then exit $? ; fi
+            if [ $? -ne 0 ]; then
+                echo "error, blocking commit"
+                exit 1
+            fi
         fi
     done
 done

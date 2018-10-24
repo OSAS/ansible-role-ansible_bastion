@@ -136,6 +136,7 @@
     mode: 0755
   with_items:
   - file_changed_commit.sh
+  - rerun_last_commit.sh
 
 - name: Add cron to merge change in git to /etc/ansible
   cron:

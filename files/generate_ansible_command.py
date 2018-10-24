@@ -189,7 +189,7 @@ def get_playbooks_to_run(checkout_path):
     # later
     return [g for g in glob.glob('%s/%s' % (checkout_path,
                                  configuration['deploy_pattern']))
-            if re.search('^[\w/.-]+$', g)]
+            if re.search('^[\\w/.-]+$', g)]
 
 
 changed_files = get_changed_files(args.git, args.old, args.new)
@@ -228,7 +228,7 @@ if 'hosts' in changed_files:
         for hostname in diff:
             # No need for a full fledged verification, just making
             # sure there is no funky chars for shell, and no space
-            if re.search('^[\w.-]+$', hostname):
+            if re.search('^[\\w.-]+$', hostname):
                 # avoid using the ssh stuff on salt bus host
                 h = filter((lambda f: f['name'] == hostname), new)[0]
                 if h['connection'] == 'ssh':

@@ -1,7 +1,7 @@
 ---
 - name: Deploy the pre-receive check
   template:
-    dest: "{{ git_repositories_dir }}/public/hooks/pre-receive.d/{{ item.order}}_{{ item.script }}"
+    dest: "{{ git_repositories_dir }}/public/hooks/pre-receive.d/{{ item.order }}_{{ item.script }}"
     src: hooks/{{ item.script }}
     mode: 0755
   with_items:

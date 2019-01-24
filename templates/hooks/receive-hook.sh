@@ -29,6 +29,7 @@ do
     for script in $HOOK_DIR/{{ item }}.d/*{sh,py} ; do
         if [ -f $script -a -x $script ]; then
             echo $OLDREV $NEWREV $REF | $script
+            if [[ $? -ne 0 ]] ; exit $? ; fi
         fi
     done
 done

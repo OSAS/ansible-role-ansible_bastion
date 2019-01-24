@@ -7,7 +7,10 @@
     mode: "u=rwx,g=rwxs"
 
 - name: Initialize the {{ repo }} git repos
-  shell: creates={{ git_repositories_dir }}/{{ repo }}/config chdir={{ git_repositories_dir }}/{{ repo }} git init --bare -q --shared=group
+  shell: git init --bare -q --shared=group
+  args:
+    creates: "{{ git_repositories_dir }}/{{ repo }}/config"
+    chdir: "{{ git_repositories_dir }}/{{ repo }}"
 
 - name: Set {{ repo }} git repos hooks
   template:

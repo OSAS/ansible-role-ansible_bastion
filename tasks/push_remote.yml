@@ -13,7 +13,7 @@
   ini_file:
     dest: "{{ git_repositories_dir }}/public/config"
     option: url
-    value: "{{ item.url}}"
+    value: "{{ item.url }}"
     section: "remote \"{{ item.name }}\""
   with_items: "{{ remotes }}"
 

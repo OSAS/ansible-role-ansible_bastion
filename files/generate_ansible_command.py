@@ -106,7 +106,7 @@ def parse_roles_playbook(playbook_file):
     if playbook_file in cache_role_playbook:
         return cache_role_playbook[playbook_file]
 
-    playbook = yaml.load(open(playbook_file, 'r'))
+    playbook = yaml.safe_load(open(playbook_file, 'r'))
     result = {}
 
     if playbook is None:
@@ -135,7 +135,7 @@ def parse_roles_meta(directory):
     for r in os.listdir(directory):
         meta_file = "%s/%s/meta/main.yml" % (directory, r)
         if os.path.exists(meta_file):
-            meta = yaml.load(open(meta_file, 'r'))
+            meta = yaml.safe_load(open(meta_file, 'r'))
             if meta and 'dependencies' in meta:
                 roles[r] = Set()
                 if meta['dependencies'] is not None:

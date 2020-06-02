@@ -39,7 +39,6 @@
 
 
 import yaml
-from sets import Set
 import os
 import glob
 import subprocess
@@ -124,7 +123,7 @@ def parse_roles_playbook(playbook_file):
 
     for doc in playbook:
         host = doc['hosts']
-        roles = Set()
+        roles = set()
         for r in doc.get('roles', []):
             roles.add(get_role(r))
         if host in result:
@@ -147,7 +146,7 @@ def parse_roles_meta(directory):
         if os.path.exists(meta_file):
             meta = yaml.safe_load(open(meta_file, 'r'))
             if meta and 'dependencies' in meta:
-                roles[r] = Set()
+                roles[r] = set()
                 if meta['dependencies'] is not None:
                     for dep in meta['dependencies']:
                         roles[r].add(get_role(dep))
@@ -172,7 +171,7 @@ def get_host_roles_dict(playbook_file, roles_path='/etc/ansible/roles'):
     hosts = parse_roles_playbook(playbook_file)
 
     for host in hosts:
-        result[host] = Set()
+        result[host] = set()
         for r in hosts[host]:
             for r2 in get_roles_deps(roles, r):
                 result[host].add(r2)
@@ -204,10 +203,10 @@ def get_playbooks_to_run(checkout_path):
 
 changed_files = get_changed_files(args.git, args.old, args.new)
 
-hosts_to_update = Set()
-playbooks_to_run = Set()
-local_playbooks_to_run = Set()
-limits = Set()
+hosts_to_update = set()
+playbooks_to_run = set()
+local_playbooks_to_run = set()
+limits = set()
 
 commands_to_run = []
 update_requirements = False
@@ -233,7 +232,7 @@ if 'hosts' in changed_files:
 
     def get_hostname(x):
         return x.get('name', '')
-    diff = Set(map(get_hostname, new)) - Set(map(get_hostname, old))
+    diff = set(map(get_hostname, new)) - set(map(get_hostname, old))
     if len(diff) > 0:
         for hostname in diff:
             # No need for a full fledged verification, just making
@@ -263,7 +262,7 @@ for p in local_playbooks_to_run:
 
 for c in commands_to_run:
     if args.dry_run:
-        print c
+        print(c)
     else:
         syslog.syslog("Running {}".format(c))
         subprocess.call(shlex.split(c), cwd=args.path)

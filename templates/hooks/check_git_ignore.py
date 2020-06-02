@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # {{ ansible_managed }}
 #
-# Copyright (c) 2016 Michael Scherer <mscherer@redhat.com>
+# Copyright (c) 2016,2020 Michael Scherer <mscherer@redhat.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,6 @@
 #
 
 import yaml
-import sets
 import sys
 import subprocess
 
@@ -42,15 +41,15 @@ for line in sys.stdin.readlines():
 
 req = subprocess.check_output(['git', 'show', last_ref + ':requirements.yml'])
 doc = yaml.safe_load(req)
-module_names = sets.Set([i['name'] for i in doc])
+module_names = set([i['name'] for i in doc])
 
-gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore'])
-ignored_dirs = sets.Set([l.replace('roles/','')  for l in gitignore.split('\n') if l.startswith("roles/")])
+gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore']).decode('utf-8')
+ignored_dirs = set([l.replace('roles/','')  for l in gitignore.split('\n') if l.startswith("roles/")])
 
 diff = module_names.difference(ignored_dirs)
 if len(diff) > 0:
-    print "error, there is modules in requirements.yml who are not in .gitignore"
-    print "please copy this:"
+    print("error, there is modules in requirements.yml who are not in .gitignore")
+    print("please copy this:")
     for d in diff:
-        print "roles/" + d
+        print("roles/" + d)
     sys.exit(1) 

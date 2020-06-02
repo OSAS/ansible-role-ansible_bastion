@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # {{ ansible_managed }}
 #
@@ -31,5 +31,5 @@ import sys
 
 for l in sys.stdin.readlines():
     if l.split()[2] != 'refs/heads/master':
-        print "Push on another branch than master is not authorized"
+        print("Push on another branch than master is not authorized")
         sys.exit(1)

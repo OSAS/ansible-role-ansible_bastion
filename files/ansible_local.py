@@ -26,7 +26,7 @@ import socket
 import subprocess
 
 if len(sys.argv) != 2:
-    print "Error, not enough arguments"
+    print("Error, not enough arguments")
     sys.exit(1)
 
 path = sys.argv[1]
@@ -35,7 +35,7 @@ authorized_path = ['local.yml', fqdn + '.yml', fqdn.split('.')[0] + '.yml']
 authorized_path = ['/etc/ansible/playbooks/' + i for i in authorized_path]
 
 if path not in authorized_path:
-    print "Unauthorized path %s" % path
+    print("Unauthorized path %s" % path)
     sys.exit(1)
 
 subprocess.call('ansible-playbook', '-c', 'local', '-D', path)

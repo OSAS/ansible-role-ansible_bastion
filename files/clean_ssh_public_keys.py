@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Copyright (c) 2017 Michael Scherer <mscherer@redhat.com>
 #
@@ -26,8 +26,8 @@ import re
 import subprocess
 
 if len(sys.argv) != 2:
-    print "Usage: %s hostname" % sys.argv[0]
-    print "Remove the hostname from .ssh/known_hosts"
+    print("Usage: %s hostname" % sys.argv[0])
+    print("Remove the hostname from .ssh/known_hosts")
     sys.exit(1)
 
 target = sys.argv[1]
@@ -35,15 +35,15 @@ target = sys.argv[1]
 # use a minimal verification on the argument, since we already verify
 # with ssh-keygen after.
 if not re.match('^[\\w.]+$', target):
-    print "Invalid hostname %s" % target
+    print("Invalid hostname %s" % target)
     sys.exit(1)
 
 if subprocess.call(['ssh-keygen', '-F', target]) != 0:
-    print "Nothing to clean for %s" % target
+    print("Nothing to clean for %s" % target)
     sys.exit(0)
 
 if subprocess.call(['ssh-keygen', '-R', target]) != 0:
-    print "Error when cleaning %s" % target
+    print("Error when cleaning %s" % target)
     sys.exit(1)
 
-print "SSH public key got cleaned for %s" % target
+print("SSH public key got cleaned for %s" % target)

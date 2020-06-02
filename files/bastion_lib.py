@@ -27,7 +27,6 @@ import tempfile
 import socket
 import shutil
 import os
-from sets import Set
 
 from ansible.parsing.dataloader import DataLoader
 
@@ -73,7 +72,7 @@ class InventoryWrapper:
 def get_changed_files(git_repo, old, new):
     """ Return a list of files who changed in git_repo between
         old and new revision"""
-    changed_files = Set()
+    changed_files = set()
     if old == '0000000000000000000000000000000000000000':
         old = subprocess.check_output(['git',
                                        'rev-list',
@@ -83,7 +82,7 @@ def get_changed_files(git_repo, old, new):
     diff = subprocess.check_output(["git", '--no-pager', 'diff',
                                     "--name-status", "--diff-filter=ACDMR",
                                     "%s..%s" % (old, new)], cwd=git_repo)
-    for line in diff.split('\n'):
+    for line in diff.decode("utf-8").split('\n'):
         if len(line) > 0:
             splitted = line.split()
             if len(splitted) == 2:
@@ -105,7 +104,7 @@ def extract_list_hosts_git(revision, path):
     try:
         host_content = subprocess.check_output(['git', 'show',
                                                 '%s:hosts' % revision],
-                                               cwd=path)
+                                               cwd=path).decode('utf-8')
     # usually, this is done when we can't check the list of hosts
     except subprocess.CalledProcessError:
         return result

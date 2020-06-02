@@ -49,6 +49,6 @@ class CallbackModule(CallbackBase):
 
         # TODO try/except, show a better error message
         fd = os.open(lock_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-        os.write(fd, str(os.getpid()))
+        os.write(fd, bytes(os.getpid()))
         os.close(fd)
         atexit.register(os.unlink, lock_file)

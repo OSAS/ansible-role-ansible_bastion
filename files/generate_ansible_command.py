@@ -119,7 +119,10 @@ def parse_roles_playbook(playbook_file):
             if isinstance(r, str):
                 roles.add(r)
             elif isinstance(r, dict):
-                roles.add(r['role'])
+                if 'role' in r:
+                    roles.add(r['role'])
+                elif 'name' in 'r':
+                    roles.add(r['name'])
         result[host] = roles
     cache_role_playbook[playbook_file] = result
     return result

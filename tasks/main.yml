@@ -14,11 +14,10 @@
 
 - name: Install tools
   package:
-    name: "{{ item }}"
-    state: present
-  with_items:
+    name:
     - git
     - sudo
+    state: present
 
 - name: Install socat
   package:

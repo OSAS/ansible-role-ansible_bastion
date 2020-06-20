@@ -1,7 +1,6 @@
 - name: Install ansible from package
   package:
-    name: "{{ item }}"
+    name:
+    - ansible
+    - python-netaddr
     state: present
-  with_items:
-  - ansible
-  - python-netaddr

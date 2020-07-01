@@ -248,8 +248,8 @@ for p in playbooks_to_run:
     if os.path.exists(p):
         commands_to_run.append('ansible-playbook -D %s' % p)
 
-for l in local_playbooks_to_run:
-    commands_to_run.append('sudo /usr/local/bin/ansible_local.py %s' % l)
+for p in local_playbooks_to_run:
+    commands_to_run.append('sudo /usr/local/bin/ansible_local.py %s' % p)
 
 for c in commands_to_run:
     if args.dry_run:

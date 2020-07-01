@@ -47,9 +47,6 @@ class VariableManagerWrapper:
 class InventoryWrapper:
     def __init__(self, host_list):
         self.loader = DataLoader()
-        # this code is a bit ugly, because Ansible 2.4 switched the order
-        # of the object and the pattern (InventoryManager is a argument to
-        # VariableManager, and vice-versa on version <2.3)
         self.im = InventoryManager(loader=self.loader,
                                    sources=[host_list, ])
         self.vm = VariableManager(loader=self.loader, inventory=self.im)

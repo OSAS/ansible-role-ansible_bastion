@@ -106,9 +106,9 @@ def get_changed_files(git_repo, old, new):
     diff = subprocess.check_output(["git", '--no-pager', 'diff',
                                     "--name-status", "--diff-filter=ACDMR",
                                     "%s..%s" % (old, new)], cwd=git_repo)
-    for l in diff.split('\n'):
-        if len(l) > 0:
-            splitted = l.split()
+    for line in diff.split('\n'):
+        if len(line) > 0:
+            splitted = line.split()
             if len(splitted) == 2:
                 (t, filename) = splitted
                 changed_files.add(filename)

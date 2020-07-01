@@ -31,18 +31,9 @@ from sets import Set
 
 from ansible.parsing.dataloader import DataLoader
 
-# TODO get ride of compat code around 2018
-ANSIBLE_24 = False
-try:
-    from ansible.inventory import Inventory
-except ImportError:
-    ANSIBLE_24 = True
-    from ansible.inventory.manager import InventoryManager
+from ansible.inventory.manager import InventoryManager
 
-try:
-    from ansible.vars import VariableManager
-except ImportError:
-    from ansible.vars.manager import VariableManager
+from ansible.vars import VariableManager
 
 
 class VariableManagerWrapper:
@@ -50,10 +41,7 @@ class VariableManagerWrapper:
         self.vm = vm
 
     def get_vars(self, loader, host):
-        if ANSIBLE_24:
-            return self.vm.get_vars(host=host)
-        else:
-            return self.vm.get_vars(loader, host=host)
+        return self.vm.get_vars(host=host)
 
 
 class InventoryWrapper:
@@ -62,13 +50,9 @@ class InventoryWrapper:
         # this code is a bit ugly, because Ansible 2.4 switched the order
         # of the object and the pattern (InventoryManager is a argument to
         # VariableManager, and vice-versa on version <2.3)
-        if ANSIBLE_24:
-            self.im = InventoryManager(loader=self.loader,
-                                       sources=[host_list, ])
-            self.vm = VariableManager(loader=self.loader, inventory=self.im)
-        else:
-            self.vm = VariableManager()
-            self.im = Inventory(self.loader, self.vm, host_list)
+        self.im = InventoryManager(loader=self.loader,
+                                   sources=[host_list, ])
+        self.vm = VariableManager(loader=self.loader, inventory=self.im)
 
     def get_loader(self):
         return self.loader
@@ -77,14 +61,10 @@ class InventoryWrapper:
         return VariableManagerWrapper(self.vm)
 
     def get_groups(self):
-        if ANSIBLE_24:
-            return self.im.groups
-        return self.im.get_groups()
+        return self.im.groups
 
     def get_hosts(self, group):
-        if ANSIBLE_24:
-            return self.im.get_hosts(pattern=group)
-        return self.im.get_hosts(group)
+        return self.im.get_hosts(pattern=group)
 
     def get_host(self, host):
         return self.im.get_host(host)

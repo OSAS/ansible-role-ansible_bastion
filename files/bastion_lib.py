@@ -33,7 +33,7 @@ from ansible.parsing.dataloader import DataLoader
 
 from ansible.inventory.manager import InventoryManager
 
-from ansible.vars import VariableManager
+from ansible.vars.manager import VariableManager
 
 
 class VariableManagerWrapper:

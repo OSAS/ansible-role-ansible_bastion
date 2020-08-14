@@ -102,6 +102,16 @@ configuration = load_config(args.config)
 cache_role_playbook = {}
 
 
+def get_role(r):
+    if isinstance(r, str):
+        return r
+    elif isinstance(r, dict):
+        if 'role' in r:
+            return r['role']
+        elif 'name' in 'r':
+            return r['name']
+
+
 def parse_roles_playbook(playbook_file):
     if playbook_file in cache_role_playbook:
         return cache_role_playbook[playbook_file]
@@ -116,13 +126,7 @@ def parse_roles_playbook(playbook_file):
         host = doc['hosts']
         roles = Set()
         for r in doc.get('roles', []):
-            if isinstance(r, str):
-                roles.add(r)
-            elif isinstance(r, dict):
-                if 'role' in r:
-                    roles.add(r['role'])
-                elif 'name' in 'r':
-                    roles.add(r['name'])
+            roles.add(get_role(r))
         result[host] = roles
     cache_role_playbook[playbook_file] = result
     return result
@@ -143,7 +147,7 @@ def parse_roles_meta(directory):
                 roles[r] = Set()
                 if meta['dependencies'] is not None:
                     for dep in meta['dependencies']:
-                        roles[r].add(dep['role'])
+                        roles[r].add(get_role(dep))
     cache_role_meta[directory] = roles
     return roles
 

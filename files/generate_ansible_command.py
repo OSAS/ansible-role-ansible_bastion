@@ -108,7 +108,7 @@ def get_role(r):
     elif isinstance(r, dict):
         if 'role' in r:
             return r['role']
-        elif 'name' in 'r':
+        elif 'name' in r:
             return r['name']
 
 

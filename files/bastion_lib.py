@@ -125,9 +125,7 @@ def extract_list_hosts_git(revision, path):
         for host in inventory.get_hosts(group):
             vars_host = variable_manager.get_vars(loader, host=host)
             result.append(
-                {'name': vars_host.get('ansible_ssh_host', host.name),
-                 'ssh_args': vars_host.get('ansible_ssh_common_args', ''),
-                 'connection': vars_host.get('ansible_connection', 'ssh')})
+                {'name': vars_host.get('ansible_ssh_host', host.name)})
 
     # for some reason, there is some kind of global cache that need to be
     # cleaned

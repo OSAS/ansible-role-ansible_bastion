@@ -127,7 +127,10 @@ def parse_roles_playbook(playbook_file):
         roles = Set()
         for r in doc.get('roles', []):
             roles.add(get_role(r))
-        result[host] = roles
+        if host in result:
+            result[host] = result[host].union(roles)
+        else:
+            result[host] = roles
     cache_role_playbook[playbook_file] = result
     return result
 

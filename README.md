@@ -226,3 +226,18 @@ It can be used like this:
     - deploy_base.yml
     - deploy_freeipa.yml
 ```
+
+Installing collections from rpms
+--------------------------------
+
+Using the `rpm_collections` variable, the role will install the given collection using rpm,
+following the convention used by Fedora.
+
+```
+- hosts: bastion.example.org
+  roles:
+  - role: bastion
+    rpm_collections:
+    - community.general
+    - ansible.posix 
+```

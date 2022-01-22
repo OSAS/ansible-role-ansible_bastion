@@ -32,3 +32,5 @@ use_tor_proxy: False
 remotes: []
 #list of playbook to run when a new host is added
 run_on_new_host: []
+# list of collections to install from rpm
+rpm_collections: []

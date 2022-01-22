@@ -4,3 +4,9 @@
     - ansible
     - python-netaddr
     state: present
+
+- name: Install rpm collections
+  package:
+    name: "ansible-collection-{{ item | replace('.', '-') }}"
+    state: present
+  with_items: "{{ rpm_collections }}"

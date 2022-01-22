@@ -41,6 +41,8 @@ for line in sys.stdin.readlines():
 
 req = subprocess.check_output(['git', 'show', last_ref + ':requirements.yml'])
 doc = yaml.safe_load(req)
+if type(doc) == type({}):
+    doc = doc['roles']
 module_names = set([i['name'] for i in doc])
 
 gitignore = subprocess.check_output(['git', 'show', last_ref + ':.gitignore']).decode('utf-8')

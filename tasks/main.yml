@@ -36,8 +36,8 @@
 - name: Add link for collections
   file:
     state: link
-    src: /root/.ansible/collections
-    dest: "~{{ ansible_username }}/.ansible/collections"
+    dest: /root/.ansible/collections
+    src: "~{{ ansible_username }}/.ansible/collections"
 
 - name: Create {{ ansible_admins_group }} group
   group:

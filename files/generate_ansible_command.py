@@ -216,7 +216,8 @@ for p in get_playbooks_to_run(args.path):
         if path == 'requirements.yml':
             update_requirements = True
         elif splitted_path[0] == 'roles':
-            if len(get_hosts_for_role(splitted_path[1], p)) > 0:
+            role_name = '/'.join(splitted_path[1:-2])
+            if len(get_hosts_for_role(role_name, p)) > 0:
                 playbooks_to_run.add(p)
 
 for path in changed_files:

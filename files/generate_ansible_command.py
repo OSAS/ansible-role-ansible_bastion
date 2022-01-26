@@ -141,9 +141,11 @@ def parse_roles_meta(directory):
     roles = {}
     if directory in cache_role_meta:
         return cache_role_meta[directory]
-    for r in os.listdir(directory):
-        meta_file = "%s/%s/meta/main.yml" % (directory, r)
-        if os.path.exists(meta_file):
+    for d, sd, f in os.walk(directory):
+        if 'main.yml' in f and d.endswith('/meta'):
+            meta_file = "%s/main.yml" % d
+            # extract the role name (-5 for /meta)
+            r = d[len(directory)+1:-5]
             meta = yaml.safe_load(open(meta_file, 'r'))
             if meta and 'dependencies' in meta:
                 roles[r] = set()

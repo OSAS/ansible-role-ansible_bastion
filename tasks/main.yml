@@ -88,7 +88,10 @@
   git_config:
     scope: global
     name: safe.directory
-    value: "{{ git_repositories_dir }}/public"
+    value: "{{ git_repositories_dir }}/{{ item }}"
+  with_items:
+  - public
+  - private
 
 - name: Add post-receive hook to checkout playbooks
   template:

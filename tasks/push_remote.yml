@@ -3,6 +3,14 @@
     name: "{{ pusher_username }}"
     generate_ssh_key: yes
 
+- name: Add the repositories to safe directory list
+  git_config:
+    scope: global
+    name: safe.directory
+    value: "{{ git_repositories_dir }}/public"
+  become: yes
+  become_user: "{{ pusher_username }}"
+
 - name: Deploy the sync script
   template:
     src: push_remote_public.sh

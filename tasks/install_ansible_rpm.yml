@@ -2,7 +2,7 @@
   package:
     name:
     - ansible
-    - python-netaddr
+    - python3-netaddr
     state: present
   when: ansible_distribution_major_version|int < 35
 
@@ -10,7 +10,7 @@
   package:
     name:
     - ansible-base
-    - python-netaddr
+    - python3-netaddr
     state: present
   when: ansible_distribution_major_version|int >= 35
 

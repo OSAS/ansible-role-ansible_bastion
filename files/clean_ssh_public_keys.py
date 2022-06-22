@@ -34,7 +34,7 @@ target = sys.argv[1]
 
 # use a minimal verification on the argument, since we already verify
 # with ssh-keygen after.
-if not re.match('^[\\w.]+$', target):
+if not re.match('^[\\w.-]+$', target):
     print("Invalid hostname %s" % target)
     sys.exit(1)
 

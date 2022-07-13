@@ -79,9 +79,13 @@ def get_changed_files(git_repo, old, new):
                                        '--max-parents=0',
                                        'HEAD'], cwd=git_repo).strip()
 
-    diff = subprocess.check_output(["git", '--no-pager', 'diff',
-                                    "--name-status", "--diff-filter=ACDMR",
-                                    "%s..%s" % (old, new)], cwd=git_repo)
+    with tempfile.TemporaryDirectory(prefix='clone_bastion') as tmpdir:
+        os.chdir(tmpdir)
+        subprocess.call(["git", "clone", "-q", git_repo, "repo"])
+        os.chdir('repo')
+        diff = subprocess.check_output(["git", '--no-pager', 'diff',
+                                        "--name-status", "--diff-filter=ACDMR",
+                                        "%s..%s" % (old, new)])
     for line in diff.decode("utf-8").split('\n'):
         if len(line) > 0:
             splitted = line.split()

@@ -49,7 +49,7 @@
     name: "{{ ansible_committers_group }}"
   when: ansible_committers_group is defined
 
-- include: install_ansible_rpm.yml
+- include_tasks: install_ansible_rpm.yml
   when: not use_ansible_git
 
 - include: install_ansible_git.yml
@@ -80,9 +80,9 @@
     validate: 'visudo -cf %s'
   when: ansible_committers_group is defined
 
-- include: create_repos.yml
+- include_tasks: create_repos.yml
 
-- include: install_callback_plugins.yml
+- include_tasks: install_callback_plugins.yml
 
 - name: Add the repositories to safe directory list
   git_config:
@@ -170,11 +170,11 @@
     hour:   "*/6"
     minute: 0
 
-- include: git_shell.yml
+- include_tasks: git_shell.yml
   when: use_git_shell
 
-- include: push_remote.yml
+- include_tasks: push_remote.yml
   when: remotes|length > 0
 
-- include: use_tor_proxy.yml
+- include_tasks: use_tor_proxy.yml
   when: use_tor_proxy

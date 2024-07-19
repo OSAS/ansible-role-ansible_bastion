@@ -1,5 +1,5 @@
 ---
-- include: compat_ansible_admin_group.yml
+- include_tasks: compat_ansible_admin_group.yml
   when: ansible_admin_group is defined
 
 - name: Verify that the groups are all defined
@@ -52,7 +52,7 @@
 - include_tasks: install_ansible_rpm.yml
   when: not use_ansible_git
 
-- include: install_ansible_git.yml
+- include_tasks: install_ansible_git.yml
   when: use_ansible_git
 
 - name: Setup ssh config for {{ ansible_username }}
@@ -108,7 +108,7 @@
     src: hooks/trigger_run.sh
     mode: 0755
 
-- include: pre_receive_checks.yml
+- include_tasks: pre_receive_checks.yml
 
 - name: Deploy various helper scripts
   copy:

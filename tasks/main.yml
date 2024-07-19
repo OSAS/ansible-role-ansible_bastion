@@ -89,6 +89,7 @@
     scope: global
     name: safe.directory
     value: "{{ git_repositories_dir }}/{{ item }}"
+    add_mode: "add"
   with_items:
   - public
   - private

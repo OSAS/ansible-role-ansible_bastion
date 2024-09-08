@@ -84,16 +84,6 @@
 
 - include_tasks: install_callback_plugins.yml
 
-- name: Add the repositories to safe directory list
-  git_config:
-    scope: global
-    name: safe.directory
-    value: "{{ git_repositories_dir }}/{{ item }}"
-    add_mode: "add"
-  with_items:
-  - public
-  - private
-
 - name: Add post-receive hook to checkout playbooks
   template:
     dest: "{{ git_repositories_dir }}/{{ item }}/hooks/post-receive.d/00_update_checkout.sh"

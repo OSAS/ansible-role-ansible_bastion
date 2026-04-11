@@ -18,6 +18,7 @@
     - git
     - sudo
     - python3-passlib
+    - python3-netaddr
     state: present
 
 - name: Install socat

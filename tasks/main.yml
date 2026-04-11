@@ -17,6 +17,7 @@
     name:
     - git
     - sudo
+    - python3-passlib
     state: present
 
 - name: Install socat
